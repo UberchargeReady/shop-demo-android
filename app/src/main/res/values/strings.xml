@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ShopDemo</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_account">Accouont</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_shop">Shop</string>
+</resources>
