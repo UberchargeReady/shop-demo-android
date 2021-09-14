@@ -1,29 +1,36 @@
 package com.dyejeekis.shopdemo.data.remote.api;
 
+import com.dyejeekis.shopdemo.data.model.Product;
 import com.dyejeekis.shopdemo.data.model.ProductList;
 
-public class ProductResponse {
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
-    private String statusCode, message;
-    private ProductList data;
+public class ProductResponse extends Response {
 
-    public ProductResponse(String json) {
+    private ProductList products;
+
+    public ProductResponse(String json) throws JSONException {
         parseResponse(json);
     }
 
-    private void parseResponse(String json) {
-        // TODO: 9/11/2021
-    }
+    @Override
+    protected void parseResponse(String json) throws JSONException {
+        Object obj = new JSONTokener(json).nextValue();
+        if (obj instanceof JSONObject) {
 
-    public String getStatusCode() {
-        return statusCode;
-    }
+        } else if (obj instanceof JSONArray) {
 
-    public String getMessage() {
-        return message;
+        }
     }
 
     public ProductList getProducts() {
-        return data;
+        return products;
+    }
+
+    public Product getProduct() {
+        return products.get(0);
     }
 }

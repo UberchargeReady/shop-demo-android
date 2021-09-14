@@ -1,14 +1,15 @@
 package com.dyejeekis.shopdemo.data.remote.api;
 
+import com.dyejeekis.shopdemo.data.model.Product;
 import com.dyejeekis.shopdemo.data.model.User;
 
-import java.util.List;
+// TODO: 9/13/2021 DELETE THIS
 
-public class OrderRequest {
+public class CartRequest {
 
     private final String path;
 
-    public OrderRequest(Builder builder) {
+    public CartRequest(Builder builder) {
         this.path = builder.path;
     }
 
@@ -22,34 +23,34 @@ public class OrderRequest {
 
         public Builder() {}
 
-        public Builder fromId(String orderId) {
-            // TODO: 9/13/2021
-            return this;
-        }
-
-        public Builder fromIds(List<String> orderIds) {
-            // TODO: 9/13/2021
-            return this;
-        }
-
         public Builder ofUser(User user) {
             // TODO: 9/13/2021
             return this;
         }
 
-        public Builder ofUsers(List<User> users) {
+        public Builder addToCart(Product product) {
             // TODO: 9/13/2021
             return this;
         }
 
-        public Builder allOrders() {
+        public Builder removeFromCart(Product product) {
             // TODO: 9/13/2021
             return this;
         }
 
-        public OrderRequest build() {
+        public Builder modifyQuantity(Product product) {
+            // TODO: 9/13/2021
+            return this;
+        }
+
+        public Builder emptyCart() {
+            // TODO: 9/13/2021
+            return this;
+        }
+
+        public CartRequest build() {
             assert path != null;
-            return new OrderRequest(this);
+            return new CartRequest(this);
         }
     }
 }

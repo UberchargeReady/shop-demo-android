@@ -11,38 +11,35 @@ import com.dyejeekis.shopdemo.data.remote.Result;
 import com.dyejeekis.shopdemo.data.remote.api.ProductRequest;
 import com.dyejeekis.shopdemo.data.remote.api.ProductResponse;
 
-import java.util.List;
-
 public class ShopViewModel extends ViewModel {
 
-    private AppApiHelper appApiHelper;
-    private MutableLiveData<ProductList> shop;
+    private final AppApiHelper appApiHelper = new AppApiHelper(
+            new ApiHeader(ShopDemoApp.getInstance().getCurrentUser()));;
+
+    private MutableLiveData<ProductList> productsMutable;
 
     public AppApiHelper getAppApiHelper() {
-        if (appApiHelper == null)
-            appApiHelper = new AppApiHelper(new ApiHeader(ShopDemoApp.getInstance().getCurrentUser()));
         return appApiHelper;
     }
 
-    public MutableLiveData<ProductList> getShop() {
-        if (shop == null) {
-            shop = new MutableLiveData<>();
+    public MutableLiveData<ProductList> getProductsMutable() {
+        if (productsMutable == null) {
+            productsMutable = new MutableLiveData<>();
             loadProducts();
         }
-        return shop;
+        return productsMutable;
     }
 
     private void loadProducts() {
-        ProductRequest productRequest = new ProductRequest();
-        productRequest.setQueryAll();
-        appApiHelper.doProductApiCallAsync(productRequest, result -> {
+        ProductRequest request = new ProductRequest.Builder().allProducts().build();
+        appApiHelper.doProductApiCallAsync(request, result -> {
             ProductList products;
             if (result instanceof Result.Success) {
                 products = ((Result.Success<ProductResponse>) result).data.getProducts();
             } else {
                 products = null;
             }
-            getShop().setValue(products);
+            getProductsMutable().setValue(products);
         });
     }
 }

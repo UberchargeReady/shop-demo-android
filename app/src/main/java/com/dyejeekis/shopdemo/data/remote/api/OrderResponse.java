@@ -2,30 +2,32 @@ package com.dyejeekis.shopdemo.data.remote.api;
 
 import com.dyejeekis.shopdemo.data.model.Order;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.util.List;
 
-public class OrderResponse {
+public class OrderResponse extends Response {
 
-    private String statusCode, message;
-    private List<Order> data;
+    private List<Order> orders;
 
-    public OrderResponse(String json) {
+    public OrderResponse(String json) throws JSONException {
         parseResponse(json);
     }
 
-    private void parseResponse(String json) {
-        // TODO: 9/11/2021
-    }
+    @Override
+    protected void parseResponse(String json) throws JSONException {
+        Object obj = new JSONTokener(json).nextValue();
+        if (obj instanceof JSONObject) {
 
-    public String getStatusCode() {
-        return statusCode;
-    }
+        } else if (obj instanceof JSONArray) {
 
-    public String getMessage() {
-        return message;
+        }
     }
 
     public List<Order> getOrders() {
-        return data;
+        return orders;
     }
 }

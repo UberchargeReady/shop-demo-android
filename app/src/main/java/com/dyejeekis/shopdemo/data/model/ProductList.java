@@ -3,40 +3,30 @@ package com.dyejeekis.shopdemo.data.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductList {
-
-    private List<Product> products;
+public class ProductList extends ArrayList<Product> {
 
     public ProductList() {
-        products = new ArrayList<>();
+        super();
     }
 
     public ProductList(List<Product> products) {
-        this.products = products;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
+        super(products);
     }
 
     public boolean addProduct(Product product) {
-        return products.add(product);
+        return add(product);
     }
 
     public boolean removeProduct(Product product) {
-        if (products.remove(product))
+        if (remove(product))
             return true;
         else throw new IllegalArgumentException("Product not in list");
     }
 
     public boolean increaseQuantity(Product product) {
-        int index = products.indexOf(product);
+        int index = indexOf(product);
         if (index > -1) {
-            products.get(index).increaseQuantity();
+            get(index).increaseQuantity();
             return true;
         } else throw new IllegalArgumentException("Product not in list");
     }
@@ -45,9 +35,9 @@ public class ProductList {
         if (product.getSelectedQuantity() == 1) {
             return removeProduct(product);
         } else {
-            int index = products.indexOf(product);
+            int index = indexOf(product);
             if (index > -1) {
-                products.get(index).decreaseQuantity();
+                get(index).decreaseQuantity();
                 return true;
             } else throw new IllegalArgumentException("Product not in list");
         }
@@ -55,7 +45,7 @@ public class ProductList {
 
     public float getTotalCost() {
         float total = 0;
-        for (Product product : products) {
+        for (Product product : this) {
             total += product.getPrice();
         }
         return total;

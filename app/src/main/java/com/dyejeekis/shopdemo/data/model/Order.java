@@ -4,42 +4,25 @@ import java.util.List;
 
 public class Order extends ProductList {
 
-    private final int id;
-    private User user;
-    private String purchaseDate;
+    private final String id, dateCreated;
+    private final User user;
 
-    public Order(int id, User user, List<Product> products, String purchaseDate) {
+    public Order(List<Product> products, String id, String dateCreated, User user) {
         super(products);
         this.id = id;
+        this.dateCreated = dateCreated;
         this.user = user;
-        this.purchaseDate = purchaseDate;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
     }
 
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getPurchaseDate() {
-        return purchaseDate;
-    }
-
-    public void setPurchaseDate(String purchaseDate) {
-        this.purchaseDate = purchaseDate;
-    }
-
-    public float getTotalCost() {
-        float total = 0;
-        for (Product product : getProducts()) {
-            total += product.getPrice();
-        }
-        return total;
     }
 }

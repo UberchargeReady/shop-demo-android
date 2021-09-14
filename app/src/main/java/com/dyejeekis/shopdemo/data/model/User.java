@@ -1,36 +1,45 @@
 package com.dyejeekis.shopdemo.data.model;
 
+import java.util.List;
+
 public class User {
 
-    public static final int LOGGED_OUT_ID = 0;
+    public static final String LOGGED_OUT_ID = "LOGGED_OUT";
 
-    private final int id;
-    private final String username;
+    private final String id, username;
+    private final ProductList cart;
+    private final List<Order> orders;
+
     private String userToken;
 
     public User() {
         this.id = LOGGED_OUT_ID;
         this.username = null;
         this.userToken = null;
+        this.cart = null;
+        this.orders = null;
     }
 
-    public User(int id, String username) {
+    public User(String id, String username) {
         this.id = id;
         this.username = username;
         this.userToken = null;
+        this.cart = null;
+        this.orders = null;
     }
 
-    public User(int id, String username, String userToken) {
+    public User(String id, String username, ProductList cart, List<Order> orders) {
         this.id = id;
         this.username = username;
-        this.userToken = userToken;
+        this.cart = cart;
+        this.orders = orders;
     }
 
     public boolean isLoggedIn() {
-        return id > LOGGED_OUT_ID;
+        return !id.equals(LOGGED_OUT_ID);
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -44,5 +53,13 @@ public class User {
 
     public void setUserToken(String userToken) {
         this.userToken = userToken;
+    }
+
+    public ProductList getCart() {
+        return cart;
+    }
+
+    public List<Order> getOrders() {
+        return orders;
     }
 }

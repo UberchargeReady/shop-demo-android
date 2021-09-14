@@ -2,15 +2,16 @@ package com.dyejeekis.shopdemo.data.model;
 
 public class Product {
 
-    private final int id;
-    private int stock, selectedQuantity;
-    private String name;
-    private float price;
+    private final String id, name;
+    private final int stock;
+    private final float price;
 
-    public Product(int id, int stock, String name, float price) {
+    private int selectedQuantity;
+
+    public Product(String id, String name, int stock,  float price) {
         this.id = id;
-        this.stock = stock;
         this.name = name;
+        this.stock = stock;
         this.price = price;
         this.selectedQuantity = 1;
     }
@@ -19,16 +20,12 @@ public class Product {
         return selectedQuantity <= stock;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public float getPrice() {
@@ -38,16 +35,8 @@ public class Product {
         return price;
     }
 
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
     public int getStock() {
         return stock;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
     }
 
     public int getSelectedQuantity() {

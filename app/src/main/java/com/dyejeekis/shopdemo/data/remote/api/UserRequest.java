@@ -1,39 +1,43 @@
 package com.dyejeekis.shopdemo.data.remote.api;
 
+import java.util.List;
+
 public class UserRequest {
 
-    private String queryString;
+    private final String path;
 
-    public UserRequest() {
-        queryString = "";
+    public UserRequest(Builder builder) {
+        this.path = builder.path;
     }
 
-    public String getQueryString() {
-        if (queryString.isEmpty()) return queryString;
-        return "?" + queryString;
+    public String getPath() {
+        return path;
     }
 
-    public void setQueryAll() {
-        // TODO: 9/11/2021
-    }
+    public static class Builder {
 
-    public void setQueryId(int id) {
-        // TODO: 9/11/2021
-    }
+        private String path;
 
-    public void setQueryIds(int[] ids) {
-        // TODO: 9/11/2021
-    }
+        public Builder() {}
 
-    public void setQueryVerified() {
-        // TODO: 9/11/2021
-    }
+        public Builder fromId(String userId) {
+            // TODO: 9/13/2021
+            return this;
+        }
 
-    public void setQueryUnverified() {
-        // TODO: 9/11/2021
-    }
+        public Builder fromIds(List<String> userIds) {
+            // TODO: 9/13/2021
+            return this;
+        }
 
-    public void setQueryAdmins() {
-        // TODO: 9/11/2021
+        public Builder allUsers() {
+            // TODO: 9/13/2021
+            return this;
+        }
+
+        public UserRequest build() {
+            assert path != null;
+            return new UserRequest(this);
+        }
     }
 }

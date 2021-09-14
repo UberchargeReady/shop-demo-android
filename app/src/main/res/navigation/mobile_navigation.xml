@@ -22,4 +22,16 @@
         android:name="com.dyejeekis.shopdemo.ui.account.AccountFragment"
         android:label="@string/title_account"
         tools:layout="@layout/fragment_account" />
+
+    <action
+        android:id="@+id/action_global_shop"
+        app:destination="@id/fragment_shop" />
+
+    <action
+        android:id="@+id/action_global_cart"
+        app:destination="@id/fragment_cart" />
+
+    <action
+        android:id="@+id/action_global_account"
+        app:destination="@id/fragment_account" />
 </navigation>

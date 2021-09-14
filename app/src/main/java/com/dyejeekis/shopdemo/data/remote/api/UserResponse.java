@@ -2,30 +2,36 @@ package com.dyejeekis.shopdemo.data.remote.api;
 
 import com.dyejeekis.shopdemo.data.model.User;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import java.util.List;
 
-public class UserResponse {
+public class UserResponse extends Response {
 
-    private String statusCode, message;
-    private List<User> data;
+    private List<User> users;
 
-    public UserResponse(String json) {
+    public UserResponse(String json) throws JSONException {
         parseResponse(json);
     }
 
-    private void parseResponse(String json) {
-        // TODO: 9/11/2021
-    }
+    @Override
+    protected void parseResponse(String json) throws JSONException {
+        Object obj = new JSONTokener(json).nextValue();
+        if (obj instanceof JSONObject) {
 
-    public String getStatusCode() {
-        return statusCode;
-    }
+        } else if (obj instanceof JSONArray) {
 
-    public String getMessage() {
-        return message;
+        }
     }
 
     public List<User> getUsers() {
-        return data;
+        return users;
+    }
+
+    public User getUser() {
+        return users.get(0);
     }
 }

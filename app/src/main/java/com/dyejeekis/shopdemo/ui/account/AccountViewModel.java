@@ -11,9 +11,9 @@ import com.dyejeekis.shopdemo.data.remote.ApiHeader;
 import com.dyejeekis.shopdemo.data.remote.AppApiHelper;
 import com.dyejeekis.shopdemo.data.remote.Result;
 import com.dyejeekis.shopdemo.data.remote.api.LoginRequest;
-import com.dyejeekis.shopdemo.data.remote.api.LoginResponse;
 import com.dyejeekis.shopdemo.data.remote.api.OrderRequest;
 import com.dyejeekis.shopdemo.data.remote.api.OrderResponse;
+import com.dyejeekis.shopdemo.data.remote.api.UserResponse;
 
 import java.util.List;
 
@@ -21,33 +21,35 @@ public class AccountViewModel extends ViewModel {
 
     private final AppApiHelper appApiHelper = new AppApiHelper(
             new ApiHeader(ShopDemoApp.getInstance().getCurrentUser()));
-    private final MutableLiveData<User> account = new MutableLiveData<>();
-    private MutableLiveData<List<Order>> accountOrders;
+
+    private final MutableLiveData<User> userMutable = new MutableLiveData<>();
+
+    private MutableLiveData<List<Order>> ordersMutable;
 
     public AppApiHelper getAppApiHelper() {
         return appApiHelper;
     }
 
-    public MutableLiveData<User> getAccount() {
-        return account;
+    public MutableLiveData<User> getUserMutable() {
+        return userMutable;
     }
 
-    public MutableLiveData<List<Order>> getAccountOrders() {
-        if (accountOrders == null) {
-            accountOrders = new MutableLiveData<>();
+    public MutableLiveData<List<Order>> getOrdersMutable() {
+        if (ordersMutable == null) {
+            ordersMutable = new MutableLiveData<>();
             loadOrders();
         }
-        return accountOrders;
+        return ordersMutable;
     }
 
     public void makeLoginRequest(@NonNull String username, @NonNull String password) {
-        LoginRequest loginRequest = new LoginRequest(username, password);
-        appApiHelper.doLoginApiCallAsync(loginRequest, result -> {
+        LoginRequest request = new LoginRequest(username, password);
+        appApiHelper.doLoginApiCallAsync(request, result -> {
             if (result instanceof Result.Success) {
-                User newUser = ((Result.Success<LoginResponse>) result).data.getUser();
+                User newUser = ((Result.Success<UserResponse>) result).data.getUser();
                 ShopDemoApp.getInstance().setCurrentUser(newUser);
                 getAppApiHelper().getApiHeader().setUser(newUser);
-                getAccount().setValue(newUser);
+                getUserMutable().setValue(newUser);
                 loadOrders();
             } else {
                 // TODO: 9/11/2021 indicate unsuccessful login request
@@ -63,23 +65,22 @@ public class AccountViewModel extends ViewModel {
             User loggedOut = new User();
             ShopDemoApp.getInstance().setCurrentUser(loggedOut);
             getAppApiHelper().getApiHeader().setUser(loggedOut);
-            getAccount().setValue(null);
+            getUserMutable().setValue(null);
         });
     }
 
     public void loadOrders() {
-        User user = getAccount().getValue();
+        User user = getUserMutable().getValue();
         if (user != null && user.isLoggedIn()) {
-            OrderRequest orderRequest = new OrderRequest();
-            orderRequest.setQueryUser(user.getId());
-            appApiHelper.doOrderApiCallAsync(orderRequest, result -> {
+            OrderRequest request = new OrderRequest.Builder().ofUser(user).build();
+            appApiHelper.doOrderApiCallAsync(request, result -> {
                 List<Order> orders;
                 if (result instanceof Result.Success) {
                     orders = ((Result.Success<OrderResponse>) result).data.getOrders();
                 } else {
                     orders = null;
                 }
-                getAccountOrders().setValue(orders);
+                getOrdersMutable().setValue(orders);
             });
         }
     }
