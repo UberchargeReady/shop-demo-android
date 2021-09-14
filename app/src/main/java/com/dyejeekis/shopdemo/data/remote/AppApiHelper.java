@@ -57,7 +57,7 @@ public class AppApiHelper implements ApiHelper {
     @Override
     public Result<UserResponse> doLogoutApiCall() {
         try {
-            String url = ApiEndpoint.BASE_URL + ApiEndpoint.USER_LOGOUT;
+            String url = ApiEndpoint.BASE_URL + ApiEndpoint.LOGOUT;
             String jsonBody = NetworkUtil.get(url, apiHeader);
             UserResponse response = new UserResponse(jsonBody);
             return new Result.Success<>(response);

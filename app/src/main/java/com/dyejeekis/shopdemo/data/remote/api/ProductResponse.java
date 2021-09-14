@@ -3,27 +3,26 @@ package com.dyejeekis.shopdemo.data.remote.api;
 import com.dyejeekis.shopdemo.data.model.Product;
 import com.dyejeekis.shopdemo.data.model.ProductList;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 public class ProductResponse extends Response {
 
-    private ProductList products;
+    private final ProductList products;
 
     public ProductResponse(String json) throws JSONException {
+        products = new ProductList();
         parseResponse(json);
     }
 
     @Override
-    protected void parseResponse(String json) throws JSONException {
-        Object obj = new JSONTokener(json).nextValue();
-        if (obj instanceof JSONObject) {
-
-        } else if (obj instanceof JSONArray) {
-
-        }
+    protected void parseJSONObject(JSONObject jsonObject) throws JSONException {
+        String id = jsonObject.getString("_id");
+        String name = jsonObject.getString("name");
+        int stock = jsonObject.getInt("stock");
+        float price = (float) jsonObject.getDouble("price");
+        Product product = new Product(id, name, stock, price);
+        products.addProduct(product);
     }
 
     public ProductList getProducts() {

@@ -11,12 +11,12 @@ public class ApiHeader {
 
     public ApiHeader(User user) {
         this.userId = user.getId();
-        this.userToken = user.getUserToken();
+        this.userToken = user.getToken();
     }
 
     public void setUser(User user) {
         this.userId = user.getId();
-        this.userToken = user.getUserToken();
+        this.userToken = user.getToken();
     }
 
     public String getUserId() {

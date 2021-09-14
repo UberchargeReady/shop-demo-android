@@ -7,11 +7,11 @@ public class Order extends ProductList {
     private final String id, dateCreated;
     private final User user;
 
-    public Order(List<Product> products, String id, String dateCreated, User user) {
+    public Order(String id, User user, String dateCreated, List<Product> products) {
         super(products);
         this.id = id;
-        this.dateCreated = dateCreated;
         this.user = user;
+        this.dateCreated = dateCreated;
     }
 
     public String getId() {

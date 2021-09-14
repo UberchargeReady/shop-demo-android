@@ -14,7 +14,7 @@ public class NetworkUtil {
 
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
-    private static OkHttpClient client = new OkHttpClient();
+    private static final OkHttpClient client = new OkHttpClient();
 
     // synchronous http requests
 

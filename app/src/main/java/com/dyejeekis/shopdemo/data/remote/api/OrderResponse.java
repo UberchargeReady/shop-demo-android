@@ -1,33 +1,46 @@
 package com.dyejeekis.shopdemo.data.remote.api;
 
 import com.dyejeekis.shopdemo.data.model.Order;
+import com.dyejeekis.shopdemo.data.model.ProductList;
+import com.dyejeekis.shopdemo.data.model.User;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderResponse extends Response {
 
-    private List<Order> orders;
+    private final List<Order> orders;
 
     public OrderResponse(String json) throws JSONException {
+        orders = new ArrayList<>();
         parseResponse(json);
     }
 
     @Override
-    protected void parseResponse(String json) throws JSONException {
-        Object obj = new JSONTokener(json).nextValue();
-        if (obj instanceof JSONObject) {
+    protected void parseJSONObject(JSONObject jsonObject) throws JSONException {
+        String id = jsonObject.getString("_id");
+        String date = jsonObject.getString("date");
 
-        } else if (obj instanceof JSONArray) {
+        UserResponse userResponse = new UserResponse(
+                jsonObject.getJSONObject("user").toString());
+        User user = userResponse.getUser();
 
-        }
+        ProductResponse productResponse = new ProductResponse(
+                jsonObject.getJSONArray("products").toString());
+        ProductList products = productResponse.getProducts();
+
+        Order order = new Order(id, user, date, products);
+        orders.add(order);
     }
 
     public List<Order> getOrders() {
         return orders;
+    }
+
+    public Order getOrder() {
+        return orders.get(0);
     }
 }

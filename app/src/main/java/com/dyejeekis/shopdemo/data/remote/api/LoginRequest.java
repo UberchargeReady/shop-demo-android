@@ -14,7 +14,7 @@ public class LoginRequest {
     }
 
     public String getPath() {
-        return ApiEndpoint.USER_LOGIN;
+        return ApiEndpoint.LOGIN;
     }
 
     public String getRequestBody() {

@@ -2,8 +2,7 @@ package com.dyejeekis.shopdemo.data.remote;
 
 public class ApiEndpoint {
 
-    // TODO: 9/11/2021
-    public static final String BASE_URL = "";
+    public static final String BASE_URL = "http://calm-island-60441.herokuapp.com";
 
     // public endpoints
 

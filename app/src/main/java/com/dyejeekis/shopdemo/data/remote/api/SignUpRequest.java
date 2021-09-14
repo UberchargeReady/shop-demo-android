@@ -14,7 +14,7 @@ public class SignUpRequest {
     }
 
     public String getPath() {
-        return ApiEndpoint.USER_CREATE;
+        return ApiEndpoint.SIGNUP;
     }
 
     public String getRequestBody() {
