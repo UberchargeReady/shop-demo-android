@@ -1,5 +1,6 @@
 package com.dyejeekis.shopdemo.data.remote;
 
+import com.dyejeekis.shopdemo.data.remote.api.CartRequest;
 import com.dyejeekis.shopdemo.data.remote.api.LoginRequest;
 import com.dyejeekis.shopdemo.data.remote.api.OrderRequest;
 import com.dyejeekis.shopdemo.data.remote.api.OrderResponse;
@@ -11,17 +12,17 @@ import com.dyejeekis.shopdemo.data.remote.api.UserResponse;
 
 public interface ApiHelper {
 
-    ApiHeader getApiHeader();
+    Result<UserResponse> postSignUp(SignUpRequest request);
 
-    Result<UserResponse> doSignUpApiCall(SignUpRequest request);
+    Result<UserResponse> postLogin(LoginRequest request);
 
-    Result<UserResponse> doLoginApiCall(LoginRequest request);
+    Result<UserResponse> getLogout();
 
-    Result<UserResponse> doLogoutApiCall();
+    Result<UserResponse> getUser(UserRequest request);
 
-    Result<UserResponse> doUserApiCall(UserRequest request);
+    Result<ProductResponse> getProduct(ProductRequest request);
 
-    Result<ProductResponse> doProductApiCall(ProductRequest request);
+    Result<ProductResponse> getCart(CartRequest request);
 
-    Result<OrderResponse> doOrderApiCall(OrderRequest request);
+    Result<OrderResponse> getOrder(OrderRequest request);
 }

@@ -1,6 +1,8 @@
 package com.dyejeekis.shopdemo.data.remote;
 
 import com.dyejeekis.shopdemo.ShopDemoApp;
+import com.dyejeekis.shopdemo.data.model.User;
+import com.dyejeekis.shopdemo.data.remote.api.CartRequest;
 import com.dyejeekis.shopdemo.data.remote.api.LoginRequest;
 import com.dyejeekis.shopdemo.data.remote.api.OrderRequest;
 import com.dyejeekis.shopdemo.data.remote.api.OrderResponse;
@@ -16,23 +18,16 @@ import java.util.concurrent.Executor;
 public class AppApiHelper implements ApiHelper {
 
     private final Executor executor;
-    private final ApiHeader apiHeader;
 
-    public AppApiHelper(ApiHeader apiHeader) {
-        this.apiHeader = apiHeader;
+    public AppApiHelper() {
         this.executor = ShopDemoApp.getInstance().getExecutorService();
     }
 
     @Override
-    public ApiHeader getApiHeader() {
-        return apiHeader;
-    }
-
-    @Override
-    public Result<UserResponse> doSignUpApiCall(SignUpRequest request) {
+    public Result<UserResponse> postSignUp(SignUpRequest request) {
         try {
             String url = ApiEndpoint.BASE_URL + request.getPath();
-            String jsonBody = NetworkUtil.post(url, apiHeader, request.getRequestBody());
+            String jsonBody = NetworkUtil.post(url, request.getApiHeader(), request.getRequestBody());
             UserResponse response = new UserResponse(jsonBody);
             return new Result.Success<>(response);
         } catch (Exception e) {
@@ -42,10 +37,10 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Result<UserResponse> doLoginApiCall(LoginRequest request) {
+    public Result<UserResponse> postLogin(LoginRequest request) {
         try {
             String url = ApiEndpoint.BASE_URL + request.getPath();
-            String jsonBody = NetworkUtil.post(url, apiHeader, request.getRequestBody());
+            String jsonBody = NetworkUtil.post(url, request.getApiHeader(), request.getRequestBody());
             UserResponse response = new UserResponse(jsonBody);
             return new Result.Success<>(response);
         } catch (Exception e) {
@@ -55,10 +50,10 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Result<UserResponse> doLogoutApiCall() {
+    public Result<UserResponse> getLogout() {
         try {
             String url = ApiEndpoint.BASE_URL + ApiEndpoint.LOGOUT;
-            String jsonBody = NetworkUtil.get(url, apiHeader);
+            String jsonBody = NetworkUtil.get(url, new ApiHeader(new User()));
             UserResponse response = new UserResponse(jsonBody);
             return new Result.Success<>(response);
         } catch (Exception e) {
@@ -68,10 +63,10 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Result<UserResponse> doUserApiCall(UserRequest request) {
+    public Result<UserResponse> getUser(UserRequest request) {
         try {
             String url = ApiEndpoint.BASE_URL + request.getPath();
-            String jsonBody = NetworkUtil.get(url, apiHeader);
+            String jsonBody = NetworkUtil.get(url, request.getApiHeader());
             UserResponse response = new UserResponse(jsonBody);
             return new Result.Success<>(response);
         } catch (Exception e) {
@@ -81,10 +76,10 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Result<ProductResponse> doProductApiCall(ProductRequest request) {
+    public Result<ProductResponse> getProduct(ProductRequest request) {
         try {
             String url = ApiEndpoint.BASE_URL + request.getPath();
-            String jsonBody = NetworkUtil.get(url, apiHeader);
+            String jsonBody = NetworkUtil.get(url, request.getApiHeader());
             ProductResponse response = new ProductResponse(jsonBody);
             return new Result.Success<>(response);
         } catch (Exception e) {
@@ -94,10 +89,23 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
-    public Result<OrderResponse> doOrderApiCall(OrderRequest request) {
+    public Result<ProductResponse> getCart(CartRequest request) {
         try {
             String url = ApiEndpoint.BASE_URL + request.getPath();
-            String jsonBody = NetworkUtil.get(url, apiHeader);
+            String jsonBody = NetworkUtil.get(url, request.getApiHeader());
+            ProductResponse response = new ProductResponse(jsonBody);
+            return new Result.Success<>(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result.Error<>(e);
+        }
+    }
+
+    @Override
+    public Result<OrderResponse> getOrder(OrderRequest request) {
+        try {
+            String url = ApiEndpoint.BASE_URL + request.getPath();
+            String jsonBody = NetworkUtil.get(url, request.getApiHeader());
             OrderResponse response = new OrderResponse(jsonBody);
             return new Result.Success<>(response);
         } catch (Exception e) {
@@ -108,42 +116,49 @@ public class AppApiHelper implements ApiHelper {
 
     public void doSignUpApiCallAsync(SignUpRequest request, ApiCallback<UserResponse> callback) {
         executor.execute(() -> {
-            Result<UserResponse> result = doSignUpApiCall(request);
+            Result<UserResponse> result = postSignUp(request);
             callback.onComplete(result);
         });
     }
 
     public void doLoginApiCallAsync(LoginRequest request, ApiCallback<UserResponse> callback) {
         executor.execute(() -> {
-            Result<UserResponse> result = doLoginApiCall(request);
+            Result<UserResponse> result = postLogin(request);
             callback.onComplete(result);
         });
     }
 
     public void doLogoutApiCallAsync(ApiCallback<UserResponse> callback) {
         executor.execute(() -> {
-            Result<UserResponse> result = doLogoutApiCall();
+            Result<UserResponse> result = getLogout();
             callback.onComplete(result);
         });
     }
 
     public void doUserApiCallAsync(UserRequest request, ApiCallback<UserResponse> callback) {
         executor.execute(() -> {
-            Result<UserResponse> result = doUserApiCall(request);
+            Result<UserResponse> result = getUser(request);
+            callback.onComplete(result);
+        });
+    }
+
+    public void doCartApiCallAsync(CartRequest request, ApiCallback<ProductResponse> callback) {
+        executor.execute(() -> {
+            Result<ProductResponse> result = getCart(request);
             callback.onComplete(result);
         });
     }
 
     public void doProductApiCallAsync(ProductRequest request, ApiCallback<ProductResponse> callback) {
         executor.execute(() -> {
-            Result<ProductResponse> result = doProductApiCall(request);
+            Result<ProductResponse> result = getProduct(request);
             callback.onComplete(result);
         });
     }
 
     public void doOrderApiCallAsync(OrderRequest request, ApiCallback<OrderResponse> callback) {
         executor.execute(() -> {
-            Result<OrderResponse> result = doOrderApiCall(request);
+            Result<OrderResponse> result = getOrder(request);
             callback.onComplete(result);
         });
     }

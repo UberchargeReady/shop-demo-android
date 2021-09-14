@@ -1,5 +1,7 @@
 package com.dyejeekis.shopdemo.data.model;
 
+import androidx.annotation.NonNull;
+
 public class User {
 
     public static final String LOGGED_OUT_ID = "LOGGED_OUT";
@@ -11,26 +13,27 @@ public class User {
 
     public User() {
         this.id = LOGGED_OUT_ID;
-        this.username = null;
-        this.token = null;
+        this.username = "";
+        this.token = "";
         this.cart = new ProductList();
     }
 
-    public User(String id, String username) {
+    public User(@NonNull String id, @NonNull String username) {
         this.id = id;
         this.username = username;
-        this.token = null;
+        this.token = "";
         this.cart = new ProductList();
     }
 
-    public User(String id, String username, String token) {
+    public User(@NonNull String id, @NonNull String username, @NonNull String token) {
         this.id = id;
         this.username = username;
         this.token = token;
         this.cart = new ProductList();
     }
 
-    public User(String id, String username, String token, ProductList cart) {
+    public User(@NonNull String id, @NonNull String username, @NonNull String token,
+                @NonNull ProductList cart) {
         this.id = id;
         this.username = username;
         this.token = token;

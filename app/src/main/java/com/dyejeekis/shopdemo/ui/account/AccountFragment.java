@@ -25,12 +25,11 @@ public class AccountFragment extends Fragment {
                 new ViewModelProvider(this).get(AccountViewModel.class);
 
         binding = FragmentAccountBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
 //
 //        accountViewModel.getAccountOrders().observe(getViewLifecycleOwner(), orders -> {
 //            // TODO: 9/11/2021
 //        });
-        return root;
+        return binding.getRoot();
     }
 
     @Override

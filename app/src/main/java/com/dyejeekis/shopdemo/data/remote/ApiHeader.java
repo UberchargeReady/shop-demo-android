@@ -1,5 +1,7 @@
 package com.dyejeekis.shopdemo.data.remote;
 
+import androidx.annotation.NonNull;
+
 import com.dyejeekis.shopdemo.data.model.User;
 
 public class ApiHeader {
@@ -9,12 +11,12 @@ public class ApiHeader {
 
     private String userId, userToken;
 
-    public ApiHeader(User user) {
+    public ApiHeader(@NonNull User user) {
         this.userId = user.getId();
         this.userToken = user.getToken();
     }
 
-    public void setUser(User user) {
+    public void setUser(@NonNull User user) {
         this.userId = user.getId();
         this.userToken = user.getToken();
     }

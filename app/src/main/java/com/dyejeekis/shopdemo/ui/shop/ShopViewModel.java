@@ -1,20 +1,17 @@
 package com.dyejeekis.shopdemo.ui.shop;
 
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import com.dyejeekis.shopdemo.ShopDemoApp;
 import com.dyejeekis.shopdemo.data.model.ProductList;
-import com.dyejeekis.shopdemo.data.remote.ApiHeader;
 import com.dyejeekis.shopdemo.data.remote.AppApiHelper;
 import com.dyejeekis.shopdemo.data.remote.Result;
 import com.dyejeekis.shopdemo.data.remote.api.ProductRequest;
 import com.dyejeekis.shopdemo.data.remote.api.ProductResponse;
+import com.dyejeekis.shopdemo.ui.BaseViewModel;
 
-public class ShopViewModel extends ViewModel {
+public class ShopViewModel extends BaseViewModel {
 
-    private final AppApiHelper appApiHelper = new AppApiHelper(
-            new ApiHeader(ShopDemoApp.getInstance().getCurrentUser()));;
+    private final AppApiHelper appApiHelper = new AppApiHelper();
 
     private MutableLiveData<ProductList> productsMutable;
 
@@ -31,7 +28,7 @@ public class ShopViewModel extends ViewModel {
     }
 
     private void loadProducts() {
-        ProductRequest request = new ProductRequest.Builder().allProducts().build();
+        ProductRequest request = new ProductRequest.Builder(getApiHeader()).allProducts().build();
         appApiHelper.doProductApiCallAsync(request, result -> {
             ProductList products;
             if (result instanceof Result.Success) {
@@ -39,7 +36,7 @@ public class ShopViewModel extends ViewModel {
             } else {
                 products = null;
             }
-            getProductsMutable().setValue(products);
+            getProductsMutable().postValue(products);
         });
     }
 }

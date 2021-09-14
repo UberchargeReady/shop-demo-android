@@ -25,12 +25,11 @@ public class CartFragment extends Fragment {
                 new ViewModelProvider(this).get(CartViewModel.class);
 
         binding = FragmentCartBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
 //
 //        cartViewModel.getCart().observe(getViewLifecycleOwner(), products -> {
 //            // TODO: 9/11/2021
 //        });
-        return root;
+        return binding.getRoot();
     }
 
     @Override

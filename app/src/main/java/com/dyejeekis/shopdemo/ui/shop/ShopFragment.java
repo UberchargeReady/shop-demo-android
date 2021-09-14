@@ -11,8 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.dyejeekis.shopdemo.databinding.FragmentShopBinding;
+import com.dyejeekis.shopdemo.ui.ProductsAdapter;
 
 public class ShopFragment extends Fragment {
 
@@ -21,16 +23,21 @@ public class ShopFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        shopViewModel =
-                new ViewModelProvider(this).get(ShopViewModel.class);
 
         binding = FragmentShopBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        binding.recyclerViewShop.setLayoutManager(new LinearLayoutManager(getContext()));
 
-//        shopViewModel.getShop().observe(getViewLifecycleOwner(), products -> {
-//            // TODO: 9/11/2021
-//        });
-        return root;
+        shopViewModel =
+                new ViewModelProvider(this).get(ShopViewModel.class);
+        shopViewModel.getProductsMutable().observe(getViewLifecycleOwner(), productList -> {
+            if (productList == null) {
+                // TODO: 9/14/2021 error
+            } else {
+                binding.recyclerViewShop.setAdapter(new ProductsAdapter(productList));
+            }
+        });
+
+        return binding.getRoot();
     }
 
     @Override

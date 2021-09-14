@@ -1,14 +1,18 @@
 package com.dyejeekis.shopdemo.data.remote.api;
 
 import com.dyejeekis.shopdemo.data.model.User;
+import com.dyejeekis.shopdemo.data.remote.ApiEndpoint;
+import com.dyejeekis.shopdemo.data.remote.ApiHeader;
+import com.dyejeekis.shopdemo.util.Util;
 
 import java.util.List;
 
-public class ProductRequest {
+public class ProductRequest extends Request {
 
     private final String path;
 
     public ProductRequest(Builder builder) {
+        super(builder.apiHeader);
         this.path = builder.path;
     }
 
@@ -18,27 +22,30 @@ public class ProductRequest {
 
     public static class Builder {
 
+        private final ApiHeader apiHeader;
         private String path;
 
-        public Builder() {}
+        public Builder(ApiHeader apiHeader) {
+            this.apiHeader = apiHeader;
+        }
 
-        public Builder fromUserCart(User user) {
-            // TODO: 9/13/2021
+        public Builder userLoggedInCart() {
+            path = ApiEndpoint.CART;
             return this;
         }
 
         public Builder fromId(String productId) {
-            // TODO: 9/13/2021
+            path = ApiEndpoint.PRODUCTS + "/" + productId;
             return this;
         }
 
         public Builder fromIds(List<String> productIds) {
-            // TODO: 9/13/2021
+            path = ApiEndpoint.PRODUCTS + "?productIds=" + Util.listToString(productIds, ",");
             return this;
         }
 
         public Builder allProducts() {
-            // TODO: 9/13/2021
+            path = ApiEndpoint.PRODUCTS;
             return this;
         }
 

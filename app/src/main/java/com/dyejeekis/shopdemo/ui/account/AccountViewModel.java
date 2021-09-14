@@ -2,25 +2,23 @@ package com.dyejeekis.shopdemo.ui.account;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.dyejeekis.shopdemo.ShopDemoApp;
 import com.dyejeekis.shopdemo.data.model.Order;
 import com.dyejeekis.shopdemo.data.model.User;
-import com.dyejeekis.shopdemo.data.remote.ApiHeader;
 import com.dyejeekis.shopdemo.data.remote.AppApiHelper;
 import com.dyejeekis.shopdemo.data.remote.Result;
 import com.dyejeekis.shopdemo.data.remote.api.LoginRequest;
 import com.dyejeekis.shopdemo.data.remote.api.OrderRequest;
 import com.dyejeekis.shopdemo.data.remote.api.OrderResponse;
 import com.dyejeekis.shopdemo.data.remote.api.UserResponse;
+import com.dyejeekis.shopdemo.ui.BaseViewModel;
 
 import java.util.List;
 
-public class AccountViewModel extends ViewModel {
+public class AccountViewModel extends BaseViewModel {
 
-    private final AppApiHelper appApiHelper = new AppApiHelper(
-            new ApiHeader(ShopDemoApp.getInstance().getCurrentUser()));
+    private final AppApiHelper appApiHelper = new AppApiHelper();
 
     private final MutableLiveData<User> userMutable = new MutableLiveData<>();
 
@@ -48,7 +46,6 @@ public class AccountViewModel extends ViewModel {
             if (result instanceof Result.Success) {
                 User newUser = ((Result.Success<UserResponse>) result).data.getUser();
                 ShopDemoApp.getInstance().setCurrentUser(newUser);
-                getAppApiHelper().getApiHeader().setUser(newUser);
                 getUserMutable().setValue(newUser);
                 loadOrders();
             } else {
@@ -63,8 +60,7 @@ public class AccountViewModel extends ViewModel {
                 // TODO: 9/11/2021 indicate unsuccessful logout request
             }
             User loggedOut = new User();
-            ShopDemoApp.getInstance().setCurrentUser(loggedOut);
-            getAppApiHelper().getApiHeader().setUser(loggedOut);
+            setCurrentUser(loggedOut);
             getUserMutable().setValue(null);
         });
     }
@@ -72,7 +68,7 @@ public class AccountViewModel extends ViewModel {
     public void loadOrders() {
         User user = getUserMutable().getValue();
         if (user != null && user.isLoggedIn()) {
-            OrderRequest request = new OrderRequest.Builder().ofUser(user).build();
+            OrderRequest request = new OrderRequest.Builder(getApiHeader()).ofUserLoggedIn().build();
             appApiHelper.doOrderApiCallAsync(request, result -> {
                 List<Order> orders;
                 if (result instanceof Result.Success) {

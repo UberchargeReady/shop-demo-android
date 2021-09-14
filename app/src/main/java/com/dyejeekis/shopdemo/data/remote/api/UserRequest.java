@@ -1,12 +1,17 @@
 package com.dyejeekis.shopdemo.data.remote.api;
 
+import com.dyejeekis.shopdemo.data.remote.ApiEndpoint;
+import com.dyejeekis.shopdemo.data.remote.ApiHeader;
+import com.dyejeekis.shopdemo.util.Util;
+
 import java.util.List;
 
-public class UserRequest {
+public class UserRequest extends Request {
 
     private final String path;
 
     public UserRequest(Builder builder) {
+        super(builder.apiHeader);
         this.path = builder.path;
     }
 
@@ -16,22 +21,30 @@ public class UserRequest {
 
     public static class Builder {
 
+        private final ApiHeader apiHeader;
         private String path;
 
-        public Builder() {}
+        public Builder(ApiHeader apiHeader) {
+            this.apiHeader = apiHeader;
+        }
+
+        public Builder ofUserLoggedIn() {
+            path = ApiEndpoint.ACCOUNT;
+            return this;
+        }
 
         public Builder fromId(String userId) {
-            // TODO: 9/13/2021
+            path = ApiEndpoint.USERS_ADMIN + "/" + userId;
             return this;
         }
 
         public Builder fromIds(List<String> userIds) {
-            // TODO: 9/13/2021
+            path = ApiEndpoint.USERS_ADMIN + "?userIds=" + Util.listToString(userIds, ",");
             return this;
         }
 
         public Builder allUsers() {
-            // TODO: 9/13/2021
+            path = ApiEndpoint.USERS_ADMIN;
             return this;
         }
 

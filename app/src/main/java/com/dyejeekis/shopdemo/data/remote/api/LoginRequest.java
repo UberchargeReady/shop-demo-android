@@ -4,11 +4,15 @@ import androidx.annotation.NonNull;
 
 import com.dyejeekis.shopdemo.data.remote.ApiEndpoint;
 
-public class LoginRequest {
+import org.json.JSONException;
+import org.json.JSONObject;
+
+public class LoginRequest extends Request {
 
     private final String username, password;
 
     public LoginRequest(@NonNull String username, @NonNull String password) {
+        super();
         this.username = username;
         this.password = password;
     }
@@ -17,8 +21,10 @@ public class LoginRequest {
         return ApiEndpoint.LOGIN;
     }
 
-    public String getRequestBody() {
-        // TODO: 9/11/2021
-        return null;
+    public String getRequestBody() throws JSONException {
+        return new JSONObject()
+                .put("username", username)
+                .put("password", password)
+                .toString();
     }
 }

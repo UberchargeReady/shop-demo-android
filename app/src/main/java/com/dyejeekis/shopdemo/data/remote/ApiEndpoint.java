@@ -16,13 +16,17 @@ public class ApiEndpoint {
 
     public static final String LOGOUT = BASE_API_ENDPOINT + "/logout";
 
+    public static final String ACCOUNT = BASE_API_ENDPOINT + "/account";
+
     public static final String PRODUCT = BASE_API_ENDPOINT + "/product";
 
     public static final String PRODUCTS = BASE_API_ENDPOINT + "/products";
 
     public static final String CART = BASE_API_ENDPOINT + "/cart";
 
-    public static final String CART_REMOVE = BASE_API_ENDPOINT + "/cart-remove-item";
+    public static final String CART_REMOVE = BASE_API_ENDPOINT + CART + "/remove";
+
+    public static final String CART_EMPTY = BASE_API_ENDPOINT + CART + "/empty";
 
     public static final String CHECKOUT = BASE_API_ENDPOINT + "/checkout";
 
@@ -33,6 +37,8 @@ public class ApiEndpoint {
     public static final String ADMIN_ENDPOINT = BASE_API_ENDPOINT + "/admin";
 
     public static final String USERS_ADMIN = ADMIN_ENDPOINT + "/users";
+
+    public static final String CARTS_ADMIN = ADMIN_ENDPOINT + "/carts";
 
     public static final String ORDERS_ADMIN = ADMIN_ENDPOINT + "/orders";
 
