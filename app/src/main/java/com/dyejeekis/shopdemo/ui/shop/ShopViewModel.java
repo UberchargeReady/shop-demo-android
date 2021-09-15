@@ -22,12 +22,12 @@ public class ShopViewModel extends BaseViewModel {
     public MutableLiveData<ProductList> getProductsMutable() {
         if (productsMutable == null) {
             productsMutable = new MutableLiveData<>();
-            loadProducts();
+            updateProducts();
         }
         return productsMutable;
     }
 
-    private void loadProducts() {
+    private void updateProducts() {
         ProductRequest request = new ProductRequest.Builder(getApiHeader()).allProducts().build();
         appApiHelper.doProductApiCallAsync(request, result -> {
             ProductList products;

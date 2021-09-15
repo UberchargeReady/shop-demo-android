@@ -1,21 +1,16 @@
 package com.dyejeekis.shopdemo.data.model;
 
-import java.util.List;
+public class Order extends Entity {
 
-public class Order extends ProductList {
-
-    private final String id, dateCreated;
+    private final String dateCreated;
     private final User user;
+    private final ProductList products;
 
-    public Order(String id, User user, String dateCreated, List<Product> products) {
-        super(products);
-        this.id = id;
-        this.user = user;
+    public Order(String id, User user, String dateCreated, ProductList products) {
+        super(id);
         this.dateCreated = dateCreated;
-    }
-
-    public String getId() {
-        return id;
+        this.user = user;
+        this.products = products;
     }
 
     public String getDateCreated() {
@@ -24,5 +19,9 @@ public class Order extends ProductList {
 
     public User getUser() {
         return user;
+    }
+
+    public ProductList getProducts() {
+        return products;
     }
 }

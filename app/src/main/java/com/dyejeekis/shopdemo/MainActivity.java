@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -37,6 +35,11 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
         binding.navView.setOnItemSelectedListener(this);
+
+        if (!ShopDemoApp.getInstance().getCurrentUser().isLoggedIn()) {
+            View view = binding.navView.findViewById(R.id.navigation_account);
+            view.performClick();
+        }
     }
 
     @Override

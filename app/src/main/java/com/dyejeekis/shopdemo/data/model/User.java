@@ -2,31 +2,31 @@ package com.dyejeekis.shopdemo.data.model;
 
 import androidx.annotation.NonNull;
 
-public class User {
+public class User extends Entity {
 
     public static final String LOGGED_OUT_ID = "LOGGED_OUT";
 
-    private final String id, username;
+    private final String username;
 
     private String token;
     private ProductList cart;
 
     public User() {
-        this.id = LOGGED_OUT_ID;
+        super(LOGGED_OUT_ID);
         this.username = "";
         this.token = "";
         this.cart = new ProductList();
     }
 
     public User(@NonNull String id, @NonNull String username) {
-        this.id = id;
+        super(id);
         this.username = username;
         this.token = "";
         this.cart = new ProductList();
     }
 
     public User(@NonNull String id, @NonNull String username, @NonNull String token) {
-        this.id = id;
+        super(id);
         this.username = username;
         this.token = token;
         this.cart = new ProductList();
@@ -34,18 +34,14 @@ public class User {
 
     public User(@NonNull String id, @NonNull String username, @NonNull String token,
                 @NonNull ProductList cart) {
-        this.id = id;
+        super(id);
         this.username = username;
         this.token = token;
         this.cart = cart;
     }
 
     public boolean isLoggedIn() {
-        return !id.equals(LOGGED_OUT_ID) && username != null && token != null && !token.isEmpty();
-    }
-
-    public String getId() {
-        return id;
+        return !id.equals(LOGGED_OUT_ID) && token != null && !token.isEmpty();
     }
 
     public String getUsername() {

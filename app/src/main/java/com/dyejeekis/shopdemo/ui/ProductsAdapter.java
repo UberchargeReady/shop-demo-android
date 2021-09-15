@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dyejeekis.shopdemo.data.model.Entity;
 import com.dyejeekis.shopdemo.data.model.Product;
 import com.dyejeekis.shopdemo.databinding.ProductItemViewBinding;
 import com.dyejeekis.shopdemo.databinding.ProductsTotalItemViewBinding;
@@ -19,11 +20,11 @@ public class ProductsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static final int VIEW_TYPE_PRODUCT = 0;
     public static final int VIEW_TYPE_TOTAL = 1;
 
-    private List<?> objectList;
+    private List<Entity> items;
 
-    public ProductsAdapter(List<?> objectList) {
-        assert objectList != null;
-        this.objectList = objectList;
+    public ProductsAdapter(List<Entity> items) {
+        assert items != null;
+        this.items = items;
     }
 
     @NonNull
@@ -45,7 +46,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        Object o = objectList.get(position);
+        Object o = items.get(position);
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_PRODUCT:
                 ((ProductViewHolder) holder).bindItem((Product) o, this);
@@ -58,14 +59,14 @@ public class ProductsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return objectList.size();
+        return items.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (objectList.get(position) instanceof Product) {
+        if (items.get(position) instanceof Product) {
             return VIEW_TYPE_PRODUCT;
-        } else if (objectList.get(position) instanceof ProductsTotal) {
+        } else if (items.get(position) instanceof ProductsTotal) {
             return VIEW_TYPE_TOTAL;
         }
         return super.getItemViewType(position);
@@ -99,18 +100,19 @@ public class ProductsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         };
     }
 
-    public List<?> getObjectList() {
-        return objectList;
+    public List<Entity> getItems() {
+        return items;
     }
 
-    public void setObjectList(List<?> objectList) {
-        this.objectList = objectList;
+    public void setItems(List<Entity> items) {
+        this.items = items;
     }
 
-    public static class ProductsTotal {
+    public static class ProductsTotal extends Entity {
         float totalCost;
 
-        public ProductsTotal(float totalCost) {
+        public ProductsTotal(String id, float totalCost) {
+            super(id);
             this.totalCost = totalCost;
         }
     }

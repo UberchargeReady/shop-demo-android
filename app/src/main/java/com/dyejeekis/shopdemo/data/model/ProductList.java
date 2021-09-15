@@ -13,6 +13,10 @@ public class ProductList extends ArrayList<Product> {
         super(products);
     }
 
+    public ArrayList<Product> getProducts() {
+        return this;
+    }
+
     public boolean addProduct(Product product) {
         return add(product);
     }

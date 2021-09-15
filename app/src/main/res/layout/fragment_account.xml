@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.shop.ShopFragment">
+    tools:context=".ui.shop.ShopFragment"
+    android:padding="6dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_account"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/included_account_auth"
+            layout="@layout/account_auth"/>
+
+        <include
+            android:id="@+id/included_account_info"
+            layout="@layout/account_info"/>
+
+        <TextView
+            android:id="@+id/textView_orders_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Orders:"
+            android:textSize="18sp"
+            android:layout_margin="6dp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_orders"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical" />
+    </LinearLayout>
+
+</RelativeLayout>

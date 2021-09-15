@@ -21,14 +21,14 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
     public MutableLiveData<ProductList> getCartMutable() {
         if (cartMutable == null) {
             cartMutable = new MutableLiveData<>();
-            loadCart();
+            updateCart();
         }
         return cartMutable;
     }
 
     @Override
-    public void loadCart() {
-        if (checkUser()) {
+    public void updateCart() {
+        if (isValidUser()) {
             ProductRequest request = new ProductRequest.Builder(getApiHeader()).userLoggedInCart().build();
             appApiHelper.doProductApiCallAsync(request, result -> {
                 if (result instanceof Result.Success) {
@@ -74,6 +74,6 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
     }
 
     private void updateCartMutable() {
-        cartMutable.setValue(cart);
+        cartMutable.postValue(cart);
     }
 }

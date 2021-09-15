@@ -1,15 +1,15 @@
 package com.dyejeekis.shopdemo.data.model;
 
-public class Product {
+public class Product extends Entity {
 
-    private final String id, name;
+    private final String name;
     private final int stock;
     private final float price;
 
     private int selectedQuantity;
 
     public Product(String id, String name, int stock,  float price) {
-        this.id = id;
+        super(id);
         this.name = name;
         this.stock = stock;
         this.price = price;
@@ -18,10 +18,6 @@ public class Product {
 
     public boolean inStock() {
         return selectedQuantity <= stock;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getName() {

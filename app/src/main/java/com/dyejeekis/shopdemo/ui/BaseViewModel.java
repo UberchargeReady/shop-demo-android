@@ -8,7 +8,7 @@ import com.dyejeekis.shopdemo.data.remote.ApiHeader;
 
 public abstract class BaseViewModel extends ViewModel {
 
-    public boolean checkUser() {
+    public boolean isValidUser() {
         User user = getCurrentUser();
         return user != null && user.isLoggedIn();
     }
