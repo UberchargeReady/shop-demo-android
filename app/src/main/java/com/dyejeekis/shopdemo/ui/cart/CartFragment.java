@@ -34,8 +34,7 @@ public class CartFragment extends Fragment implements ProductListener {
         binding = FragmentCartBinding.inflate(inflater, container, false);
         binding.recyclerViewCart.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        cartViewModel =
-                new ViewModelProvider(this).get(CartViewModel.class);
+        cartViewModel = new ViewModelProvider(requireActivity()).get(CartViewModel.class);
         cartViewModel.getCartMutable().observe(getViewLifecycleOwner(), this::onCartUpdated);
 
         return binding.getRoot();
@@ -44,7 +43,7 @@ public class CartFragment extends Fragment implements ProductListener {
     private void onCartUpdated(ProductList cart) {
         List<Entity> items = new ArrayList<>(cart);
         items.add(new ProductsAdapter.ProductsTotal("", cart.getTotalCost()));
-        binding.recyclerViewCart.setAdapter(new ProductsAdapter(items));
+        binding.recyclerViewCart.setAdapter(new ProductsAdapter(items, this));
     }
 
     @Override
@@ -79,5 +78,10 @@ public class CartFragment extends Fragment implements ProductListener {
         return v -> {
             cartViewModel.removeFromCart(product);
         };
+    }
+
+    @Override
+    public boolean cartVisible() {
+        return true;
     }
 }

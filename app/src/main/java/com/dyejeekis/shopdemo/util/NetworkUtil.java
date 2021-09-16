@@ -5,6 +5,7 @@ import android.util.Log;
 import com.dyejeekis.shopdemo.data.remote.ApiHeader;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -19,6 +20,10 @@ public class NetworkUtil {
 
     private static final OkHttpClient client = new OkHttpClient.Builder()
             .addInterceptor(new LoggingInterceptor())
+            //.connectTimeout(10, TimeUnit.SECONDS)
+            //.readTimeout(10, TimeUnit.SECONDS)
+            //.writeTimeout(10, TimeUnit.SECONDS)
+            //.callTimeout(10, TimeUnit.SECONDS)
             .build();
 
     // synchronous http requests

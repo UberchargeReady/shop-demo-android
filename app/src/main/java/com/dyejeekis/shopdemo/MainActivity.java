@@ -16,8 +16,11 @@ import com.google.android.material.navigation.NavigationBarView;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
 
+    public static final String APP_STARTED_KEY = "key.APP_STARTED";
+
     private ActivityMainBinding binding;
     private NavController navController;
+    private boolean appStarted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +39,26 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         NavigationUI.setupWithNavController(binding.navView, navController);
         binding.navView.setOnItemSelectedListener(this);
 
-        if (!ShopDemoApp.getInstance().getCurrentUser().isLoggedIn()) {
-            View view = binding.navView.findViewById(R.id.navigation_account);
-            view.performClick();
+        if (savedInstanceState != null) {
+            appStarted = savedInstanceState.getBoolean(APP_STARTED_KEY, false);
         }
+        onAppStart();
+    }
+
+    private void onAppStart() {
+        if (!appStarted) {
+            if (!ShopDemoApp.getInstance().getCurrentUser().isLoggedIn()) {
+                View view = binding.navView.findViewById(R.id.navigation_account);
+                view.performClick();
+            }
+        }
+        appStarted = true;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(APP_STARTED_KEY, appStarted);
     }
 
     @Override
@@ -55,6 +74,13 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
                 navController.navigate(R.id.action_global_account);
                 break;
         }
+        return true;
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        //return super.onSupportNavigateUp();
+        finish();
         return true;
     }
 

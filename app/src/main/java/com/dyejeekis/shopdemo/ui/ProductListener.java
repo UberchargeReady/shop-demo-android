@@ -13,4 +13,6 @@ public interface ProductListener {
     View.OnClickListener onPlusClick(Product product);
 
     View.OnClickListener onCartClick(Product product);
+
+    boolean cartVisible();
 }

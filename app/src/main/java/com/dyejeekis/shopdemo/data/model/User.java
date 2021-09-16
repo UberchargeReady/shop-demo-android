@@ -4,15 +4,13 @@ import androidx.annotation.NonNull;
 
 public class User extends Entity {
 
-    public static final String LOGGED_OUT_ID = "LOGGED_OUT";
-
     private final String username;
 
     private String token;
     private ProductList cart;
 
     public User() {
-        super(LOGGED_OUT_ID);
+        super("");
         this.username = "";
         this.token = "";
         this.cart = new ProductList();
@@ -41,7 +39,7 @@ public class User extends Entity {
     }
 
     public boolean isLoggedIn() {
-        return !id.equals(LOGGED_OUT_ID) && token != null && !token.isEmpty();
+        return !id.isEmpty() && token != null && !token.isEmpty();
     }
 
     public String getUsername() {

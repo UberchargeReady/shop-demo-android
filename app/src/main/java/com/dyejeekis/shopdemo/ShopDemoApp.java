@@ -40,7 +40,7 @@ public class ShopDemoApp extends Application {
         if (currentUser == null) {
             SharedPreferences sharedPref = getSharedPreferences(USER_FILE_KEY, Context.MODE_PRIVATE);
             String userId = sharedPref.getString(USER_ID_KEY, null);
-            if (userId == null) currentUser = new User();
+            if (userId == null || userId.isEmpty()) currentUser = new User();
             else {
                 String username = sharedPref.getString(USER_NAME_KEY, null);
                 String token = sharedPref.getString(USER_TOKEN_KEY, null);

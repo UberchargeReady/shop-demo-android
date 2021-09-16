@@ -37,10 +37,10 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
         binding.includedAccountAuth.buttonLogin.setOnClickListener(this);
         binding.includedAccountAuth.buttonSignup.setOnClickListener(this);
         binding.includedAccountInfo.buttonLogout.setOnClickListener(this);
+        binding.nestedScrollView.setNestedScrollingEnabled(false);
         binding.recyclerViewOrders.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        accountViewModel =
-                new ViewModelProvider(this).get(AccountViewModel.class);
+        accountViewModel = new ViewModelProvider(this).get(AccountViewModel.class);
         accountViewModel.getUserMutable().observe(getViewLifecycleOwner(), this::onUserUpdated);
         accountViewModel.getOrdersMutable().observe(getViewLifecycleOwner(), this::onOrdersUpdated);
 
@@ -71,12 +71,14 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             List<Entity> items = new ArrayList<>();
             for (Order order : orders) {
                 List<Product> products = order.getProducts();
+                items.add(new ProductsAdapter.ProductsTitle("", order.getDateCreated()));
                 items.addAll(products);
 
                 ProductsAdapter.ProductsTotal total = new ProductsAdapter.ProductsTotal(
                         order.getId(), order.getProducts().getTotalCost());
                 items.add(total);
             }
+            items.add(new ProductsAdapter.ProductsTitle("", "\n\n"));
             ProductsAdapter adapter = new ProductsAdapter(items);
             binding.recyclerViewOrders.setAdapter(adapter);
         }

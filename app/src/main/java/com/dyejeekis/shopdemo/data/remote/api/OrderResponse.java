@@ -1,5 +1,6 @@
 package com.dyejeekis.shopdemo.data.remote.api;
 
+import com.dyejeekis.shopdemo.ShopDemoApp;
 import com.dyejeekis.shopdemo.data.model.Order;
 import com.dyejeekis.shopdemo.data.model.ProductList;
 import com.dyejeekis.shopdemo.data.model.User;
@@ -24,9 +25,14 @@ public class OrderResponse extends Response {
         String id = jsonObject.getString("_id");
         String date = jsonObject.getString("date");
 
-        UserResponse userResponse = new UserResponse(
-                jsonObject.getJSONObject("user").toString());
-        User user = userResponse.getUser();
+        User user;
+        try {
+            UserResponse userResponse = new UserResponse(
+                    jsonObject.getJSONObject("user").toString());
+            user = userResponse.getUser();
+        } catch (JSONException e) {
+            user = ShopDemoApp.getInstance().getCurrentUser();
+        }
 
         ProductResponse productResponse = new ProductResponse(
                 jsonObject.getJSONArray("products").toString());

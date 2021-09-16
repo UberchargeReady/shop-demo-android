@@ -6,32 +6,40 @@
     tools:context=".ui.shop.ShopFragment"
     android:padding="6dp">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical">
 
-        <include
-            android:id="@+id/included_account_auth"
-            layout="@layout/account_auth"/>
-
-        <include
-            android:id="@+id/included_account_info"
-            layout="@layout/account_info"/>
-
-        <TextView
-            android:id="@+id/textView_orders_label"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Orders:"
-            android:textSize="18sp"
-            android:layout_margin="6dp"/>
+            android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView_orders"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="vertical" />
-    </LinearLayout>
+            <include
+                android:id="@+id/included_account_auth"
+                layout="@layout/account_auth"/>
+
+            <include
+                android:id="@+id/included_account_info"
+                layout="@layout/account_info"/>
+
+            <TextView
+                android:id="@+id/textView_orders_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Orders:"
+                android:textSize="18sp"
+                android:layout_margin="6dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_orders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"
+                android:overScrollMode="never"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
 </RelativeLayout>
