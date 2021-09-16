@@ -26,6 +26,7 @@ public class UserRequest extends Request {
 
         public Builder(ApiHeader apiHeader) {
             this.apiHeader = apiHeader;
+            this.path = "";
         }
 
         public Builder ofUserLoggedIn() {
@@ -49,7 +50,6 @@ public class UserRequest extends Request {
         }
 
         public UserRequest build() {
-            assert path != null;
             return new UserRequest(this);
         }
     }

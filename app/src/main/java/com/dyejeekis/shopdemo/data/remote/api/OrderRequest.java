@@ -11,10 +11,12 @@ import java.util.List;
 public class OrderRequest extends Request {
 
     private final String path;
+    private final String body;
 
     public OrderRequest(Builder builder) {
         super(builder.apiHeader);
         this.path = builder.path;
+        this.body = builder.body;
     }
 
     public String getPath() {
@@ -25,9 +27,12 @@ public class OrderRequest extends Request {
 
         private final ApiHeader apiHeader;
         private String path;
+        private String body;
 
         public Builder(ApiHeader apiHeader) {
             this.apiHeader = apiHeader;
+            this.path = "";
+            this.body = "";
         }
 
         public Builder fromId(String orderId) {
@@ -64,8 +69,17 @@ public class OrderRequest extends Request {
             return this;
         }
 
+        public Builder checkout() {
+            path = ApiEndpoint.CHECKOUT;
+            return this;
+        }
+
+        public Builder body(String body) {
+            this.body = body;
+            return this;
+        }
+
         public OrderRequest build() {
-            assert path != null;
             return new OrderRequest(this);
         }
     }

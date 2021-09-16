@@ -8,23 +8,32 @@ import com.dyejeekis.shopdemo.data.remote.ApiHeader;
 public class CartRequest extends Request {
 
     private final String path;
+    private final String body;
 
     public CartRequest(Builder builder) {
         super(builder.apiHeader);
         this.path = builder.path;
+        this.body = builder.body;
     }
 
     public String getPath() {
         return path;
     }
 
+    public String getBody() {
+        return body;
+    }
+
     public static class Builder {
 
         private final ApiHeader apiHeader;
         private String path;
+        private String body;
 
         public Builder(ApiHeader apiHeader) {
             this.apiHeader = apiHeader;
+            this.path = "";
+            this.body = "";
         }
 
         public Builder ofUser(User user) {
@@ -57,8 +66,12 @@ public class CartRequest extends Request {
             return this;
         }
 
+        public Builder body(String body) {
+            this.body = body;
+            return this;
+        }
+
         public CartRequest build() {
-            assert path != null;
             return new CartRequest(this);
         }
     }

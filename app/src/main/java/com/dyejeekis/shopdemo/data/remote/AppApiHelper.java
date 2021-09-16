@@ -8,6 +8,8 @@ import com.dyejeekis.shopdemo.data.remote.api.OrderRequest;
 import com.dyejeekis.shopdemo.data.remote.api.OrderResponse;
 import com.dyejeekis.shopdemo.data.remote.api.ProductRequest;
 import com.dyejeekis.shopdemo.data.remote.api.ProductResponse;
+import com.dyejeekis.shopdemo.data.remote.api.Request;
+import com.dyejeekis.shopdemo.data.remote.api.Response;
 import com.dyejeekis.shopdemo.data.remote.api.SignUpRequest;
 import com.dyejeekis.shopdemo.data.remote.api.UserRequest;
 import com.dyejeekis.shopdemo.data.remote.api.UserResponse;
@@ -21,6 +23,10 @@ public class AppApiHelper implements ApiHelper {
 
     public AppApiHelper() {
         this.executor = ShopDemoApp.getInstance().getExecutorService();
+    }
+
+    public Executor getExecutor() {
+        return executor;
     }
 
     @Override
@@ -53,7 +59,8 @@ public class AppApiHelper implements ApiHelper {
     public Result<UserResponse> getLogout() {
         try {
             String url = ApiEndpoint.BASE_URL + ApiEndpoint.LOGOUT;
-            String jsonBody = NetworkUtil.get(url, new ApiHeader(new User()));
+            String jsonBody = NetworkUtil.get(url,
+                    new ApiHeader(ShopDemoApp.getInstance().getCurrentUser()));
             UserResponse response = new UserResponse(jsonBody);
             return new Result.Success<>(response);
         } catch (Exception e) {
@@ -102,6 +109,19 @@ public class AppApiHelper implements ApiHelper {
     }
 
     @Override
+    public Result<ProductResponse> postCart(CartRequest request) {
+        try {
+            String url = ApiEndpoint.BASE_URL + request.getPath();
+            String jsonBody = NetworkUtil.post(url, request.getApiHeader(), request.getBody());
+            ProductResponse response = new ProductResponse(jsonBody);
+            return new Result.Success<>(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result.Error<>(e);
+        }
+    }
+
+    @Override
     public Result<OrderResponse> getOrder(OrderRequest request) {
         try {
             String url = ApiEndpoint.BASE_URL + request.getPath();
@@ -112,54 +132,5 @@ public class AppApiHelper implements ApiHelper {
             e.printStackTrace();
             return new Result.Error<>(e);
         }
-    }
-
-    public void doSignUpApiCallAsync(SignUpRequest request, ApiCallback<UserResponse> callback) {
-        executor.execute(() -> {
-            Result<UserResponse> result = postSignUp(request);
-            callback.onComplete(result);
-        });
-    }
-
-    public void doLoginApiCallAsync(LoginRequest request, ApiCallback<UserResponse> callback) {
-        executor.execute(() -> {
-            Result<UserResponse> result = postLogin(request);
-            callback.onComplete(result);
-        });
-    }
-
-    public void doLogoutApiCallAsync(ApiCallback<UserResponse> callback) {
-        executor.execute(() -> {
-            Result<UserResponse> result = getLogout();
-            callback.onComplete(result);
-        });
-    }
-
-    public void doUserApiCallAsync(UserRequest request, ApiCallback<UserResponse> callback) {
-        executor.execute(() -> {
-            Result<UserResponse> result = getUser(request);
-            callback.onComplete(result);
-        });
-    }
-
-    public void doCartApiCallAsync(CartRequest request, ApiCallback<ProductResponse> callback) {
-        executor.execute(() -> {
-            Result<ProductResponse> result = getCart(request);
-            callback.onComplete(result);
-        });
-    }
-
-    public void doProductApiCallAsync(ProductRequest request, ApiCallback<ProductResponse> callback) {
-        executor.execute(() -> {
-            Result<ProductResponse> result = getProduct(request);
-            callback.onComplete(result);
-        });
-    }
-
-    public void doOrderApiCallAsync(OrderRequest request, ApiCallback<OrderResponse> callback) {
-        executor.execute(() -> {
-            Result<OrderResponse> result = getOrder(request);
-            callback.onComplete(result);
-        });
     }
 }

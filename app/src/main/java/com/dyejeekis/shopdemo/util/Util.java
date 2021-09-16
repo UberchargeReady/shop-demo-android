@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class Util {
@@ -29,6 +32,13 @@ public class Util {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    public static String safeJsonToString(JSONObject jsonObject, String key) {
+        try {
+            return jsonObject.getString(key);
+        } catch (JSONException e) {}
+        return "";
     }
 
 }

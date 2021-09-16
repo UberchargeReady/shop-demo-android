@@ -15,27 +15,22 @@ public class ShopViewModel extends BaseViewModel {
 
     private MutableLiveData<ProductList> productsMutable;
 
-    public AppApiHelper getAppApiHelper() {
-        return appApiHelper;
-    }
-
     public MutableLiveData<ProductList> getProductsMutable() {
         if (productsMutable == null) {
             productsMutable = new MutableLiveData<>();
-            updateProducts();
+            loadProducts();
         }
         return productsMutable;
     }
 
-    private void updateProducts() {
+    private void loadProducts() {
         ProductRequest request = new ProductRequest.Builder(getApiHeader()).allProducts().build();
-        appApiHelper.doProductApiCallAsync(request, result -> {
+        appApiHelper.getExecutor().execute(() -> {
+            Result<ProductResponse> result = appApiHelper.getProduct(request);
             ProductList products;
-            if (result instanceof Result.Success) {
+            if (result instanceof Result.Success)
                 products = ((Result.Success<ProductResponse>) result).data.getProducts();
-            } else {
-                products = null;
-            }
+            else products = null;
             getProductsMutable().postValue(products);
         });
     }

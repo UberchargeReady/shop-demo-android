@@ -20,19 +20,20 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
         return binding;
     }
 
-    public void bindItem(Product product, ProductListeners listener) {
+    public void bindItem(Product product, ProductListener listener) {
         binding.textViewName.setText(product.getName());
         binding.textViewPrice.setText("$" + String.format("%.02f", product.getPrice()));
         binding.textViewQuantity.setText(String.valueOf(product.getSelectedQuantity()));
-        binding.textViewRemove.setOnClickListener(listener.onRemoveClick(product));
-        binding.textViewAdd.setOnClickListener(listener.onAddClick(product));
-        binding.imageButtonCart.setOnClickListener(listener.onCartClick(product));
-        binding.layoutProduct.setOnClickListener(listener.onProductClick(product));
+        if (listener == null) {
+            binding.textViewMinus.setVisibility(View.GONE);
+            binding.textViewPlus.setVisibility(View.GONE);
+            binding.imageButtonCart.setVisibility(View.GONE);
+        } else {
+            binding.textViewMinus.setOnClickListener(listener.onMinusClick(product));
+            binding.textViewPlus.setOnClickListener(listener.onPlusClick(product));
+            binding.imageButtonCart.setOnClickListener(listener.onCartClick(product));
+            binding.layoutProduct.setOnClickListener(listener.onProductClick(product));
+        }
     }
 
-    public void hideCartOptions() {
-        binding.textViewRemove.setVisibility(View.GONE);
-        binding.textViewAdd.setVisibility(View.GONE);
-        binding.imageButtonCart.setVisibility(View.GONE);
-    }
 }

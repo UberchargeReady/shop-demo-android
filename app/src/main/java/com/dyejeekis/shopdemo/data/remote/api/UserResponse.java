@@ -3,6 +3,7 @@ package com.dyejeekis.shopdemo.data.remote.api;
 import com.dyejeekis.shopdemo.data.model.Product;
 import com.dyejeekis.shopdemo.data.model.ProductList;
 import com.dyejeekis.shopdemo.data.model.User;
+import com.dyejeekis.shopdemo.util.Util;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,7 +25,7 @@ public class UserResponse extends Response {
     protected void parseJSONObject(JSONObject jsonObj) throws JSONException {
         String id = jsonObj.getString("_id");
         String username = jsonObj.getString("username");
-        String token = jsonObj.getString("token");
+        String token = Util.safeJsonToString(jsonObj, "token");
         JSONObject cart = jsonObj.getJSONObject("cart");
         JSONArray items = cart.getJSONArray("items");
         ProductResponse productResponse = new ProductResponse(items.toString());

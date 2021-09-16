@@ -24,5 +24,7 @@ public interface ApiHelper {
 
     Result<ProductResponse> getCart(CartRequest request);
 
+    Result<ProductResponse>  postCart(CartRequest request);
+
     Result<OrderResponse> getOrder(OrderRequest request);
 }

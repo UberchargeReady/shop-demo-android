@@ -1,7 +1,6 @@
 package com.dyejeekis.shopdemo.ui;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -14,17 +13,24 @@ import com.dyejeekis.shopdemo.databinding.ProductsTotalItemViewBinding;
 
 import java.util.List;
 
-public class ProductsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-        implements ProductListeners {
+public class ProductsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     public static final int VIEW_TYPE_PRODUCT = 0;
     public static final int VIEW_TYPE_TOTAL = 1;
 
     private List<Entity> items;
+    private final ProductListener listener;
 
     public ProductsAdapter(List<Entity> items) {
         assert items != null;
         this.items = items;
+        this.listener = null;
+    }
+
+    public ProductsAdapter(List<Entity> items, ProductListener listener) {
+        assert items != null;
+        this.items = items;
+        this.listener = listener;
     }
 
     @NonNull
@@ -49,7 +55,10 @@ public class ProductsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Object o = items.get(position);
         switch (holder.getItemViewType()) {
             case VIEW_TYPE_PRODUCT:
-                ((ProductViewHolder) holder).bindItem((Product) o, this);
+                ProductViewHolder productViewHolder = (ProductViewHolder) holder;
+                productViewHolder.bindItem((Product) o, listener);
+                // TODO: 9/16/2021
+                //productViewHolder.getBinding().imageButtonCart.setImageDrawable();
                 break;
             case VIEW_TYPE_TOTAL:
                 ((ProductsTotalViewHolder) holder).bindItem((ProductsTotal) o);
@@ -70,34 +79,6 @@ public class ProductsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return VIEW_TYPE_TOTAL;
         }
         return super.getItemViewType(position);
-    }
-
-    @Override
-    public View.OnClickListener onProductClick(Product product) {
-        return v -> {
-            // TODO: 9/11/2021
-        };
-    }
-
-    @Override
-    public View.OnClickListener onRemoveClick(Product product) {
-        return v -> {
-            // TODO: 9/11/2021
-        };
-    }
-
-    @Override
-    public View.OnClickListener onAddClick(Product product) {
-        return v -> {
-            // TODO: 9/11/2021
-        };
-    }
-
-    @Override
-    public View.OnClickListener onCartClick(Product product) {
-        return v -> {
-            // TODO: 9/11/2021
-        };
     }
 
     public List<Entity> getItems() {

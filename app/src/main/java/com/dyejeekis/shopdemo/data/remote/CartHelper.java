@@ -4,7 +4,7 @@ import com.dyejeekis.shopdemo.data.model.Product;
 
 public interface CartHelper {
 
-    void updateCart();
+    void loadCart();
 
     void addToCart(Product product);
 

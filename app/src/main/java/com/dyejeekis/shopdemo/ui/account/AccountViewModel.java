@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.dyejeekis.shopdemo.data.model.Order;
 import com.dyejeekis.shopdemo.data.model.User;
+import com.dyejeekis.shopdemo.data.remote.ApiCallback;
+import com.dyejeekis.shopdemo.data.remote.AppApiCallback;
 import com.dyejeekis.shopdemo.data.remote.AppApiHelper;
 import com.dyejeekis.shopdemo.data.remote.Result;
 import com.dyejeekis.shopdemo.data.remote.api.LoginRequest;
@@ -24,14 +26,10 @@ public class AccountViewModel extends BaseViewModel {
 
     private MutableLiveData<List<Order>> ordersMutable;
 
-    public AppApiHelper getAppApiHelper() {
-        return appApiHelper;
-    }
-
     public MutableLiveData<User> getUserMutable() {
         if (userMutable == null) {
             userMutable = new MutableLiveData<>();
-            updateUser();
+            updateUserMutable(getCurrentUser());
         }
         return userMutable;
     }
@@ -44,51 +42,49 @@ public class AccountViewModel extends BaseViewModel {
         return ordersMutable;
     }
 
-    public void makeLoginRequest(@NonNull String username, @NonNull String password) {
+    public void makeLoginRequest(@NonNull String username, @NonNull String password,
+                                 AppApiCallback<UserResponse> callback) {
         LoginRequest request = new LoginRequest(username, password);
-        appApiHelper.doLoginApiCallAsync(request, result -> {
-            if (result instanceof Result.Success) {
-                getUserMutable().postValue(((Result.Success<UserResponse>) result).data.getUser());
-            } else {
-                // TODO: 9/15/2021
-            }
+        appApiHelper.getExecutor().execute(() -> {
+            Result<UserResponse> result = appApiHelper.postLogin(request);
+            if (result instanceof Result.Success)
+                updateUserMutable(((Result.Success<UserResponse>) result).data.getUser());
+            callback.onComplete(result);
         });
     }
 
-    public void makeLogoutRequest() {
-        appApiHelper.doLogoutApiCallAsync(result -> {
-            if (result instanceof Result.Error) {
-                // TODO: 9/15/2021
-            }
-            getUserMutable().postValue(new User());
+    public void makeLogoutRequest(AppApiCallback<UserResponse> callback) {
+        appApiHelper.getExecutor().execute(() -> {
+            Result<UserResponse> result = appApiHelper.getLogout();
+            updateUserMutable(new User());
+            callback.onComplete(result);
         });
     }
 
-    public void makeSignUpRequest(@NonNull String username, @NonNull String password) {
+    public void makeSignUpRequest(@NonNull String username, @NonNull String password,
+                                  AppApiCallback<UserResponse> callback) {
         SignUpRequest request = new SignUpRequest(username, password);
-        appApiHelper.doSignUpApiCallAsync(request, result -> {
+        appApiHelper.getExecutor().execute(() -> {
+            Result<UserResponse> result = appApiHelper.postSignUp(request);
             if (result instanceof Result.Success) {
-                getUserMutable().postValue(((Result.Success<UserResponse>) result).data.getUser());
-            } else {
-                // TODO: 9/15/2021
+                updateUserMutable(((Result.Success<UserResponse>) result).data.getUser());
             }
+            callback.onComplete(result);
         });
     }
 
-    public void updateUser() {
-        getUserMutable().postValue(getCurrentUser());
+    private void updateUserMutable(User user) {
+        getUserMutable().postValue(user);
     }
 
     public void updateOrders() {
         if (isValidUser()) {
             OrderRequest request = new OrderRequest.Builder(getApiHeader()).ofUserLoggedIn().build();
-            appApiHelper.doOrderApiCallAsync(request, result -> {
-                List<Order> orders;
-                if (result instanceof Result.Success) {
+            appApiHelper.getExecutor().execute(() -> {
+                Result<OrderResponse> result = appApiHelper.getOrder(request);
+                List<Order> orders = null;
+                if (result instanceof Result.Success)
                     orders = ((Result.Success<OrderResponse>) result).data.getOrders();
-                } else {
-                    orders = null;
-                }
                 getOrdersMutable().postValue(orders);
             });
         }

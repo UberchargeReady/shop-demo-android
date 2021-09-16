@@ -27,6 +27,7 @@ public class ProductRequest extends Request {
 
         public Builder(ApiHeader apiHeader) {
             this.apiHeader = apiHeader;
+            this.path = "";
         }
 
         public Builder userLoggedInCart() {
@@ -50,7 +51,6 @@ public class ProductRequest extends Request {
         }
 
         public ProductRequest build() {
-            assert path != null;
             return new ProductRequest(this);
         }
     }

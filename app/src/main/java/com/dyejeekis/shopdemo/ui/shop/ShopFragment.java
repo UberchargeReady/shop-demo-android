@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.dyejeekis.shopdemo.data.model.Entity;
+import com.dyejeekis.shopdemo.data.model.ProductList;
 import com.dyejeekis.shopdemo.databinding.FragmentShopBinding;
 import com.dyejeekis.shopdemo.ui.ProductsAdapter;
 
@@ -30,16 +31,18 @@ public class ShopFragment extends Fragment {
 
         shopViewModel =
                 new ViewModelProvider(this).get(ShopViewModel.class);
-        shopViewModel.getProductsMutable().observe(getViewLifecycleOwner(), productList -> {
-            if (productList == null) {
-                // TODO: 9/14/2021 error
-            } else {
-                List<Entity> items = new ArrayList<>(productList);
-                binding.recyclerViewShop.setAdapter(new ProductsAdapter(items));
-            }
-        });
+        shopViewModel.getProductsMutable().observe(getViewLifecycleOwner(), this::onShopUpdated);
 
         return binding.getRoot();
+    }
+
+    private void onShopUpdated(ProductList productList) {
+        if (productList == null) {
+            // TODO: 9/14/2021 error
+        } else {
+            List<Entity> items = new ArrayList<>(productList);
+            binding.recyclerViewShop.setAdapter(new ProductsAdapter(items));
+        }
     }
 
     @Override
