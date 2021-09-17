@@ -58,7 +58,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
 
             binding.includedAccountInfo.textViewUsername.setText(user.getUsername());
 
-            accountViewModel.updateOrders();
+            accountViewModel.loadOrders();
         } else {
             binding.includedAccountAuth.layoutAccountAuth.setVisibility(View.VISIBLE);
             binding.includedAccountInfo.layoutAccountInfo.setVisibility(View.GONE);
@@ -82,6 +82,8 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             items.add(new ProductsAdapter.ProductsTitle("", "\n\n"));
             ProductsAdapter adapter = new ProductsAdapter(items);
             binding.recyclerViewOrders.setAdapter(adapter);
+        } else {
+            binding.recyclerViewOrders.setAdapter(null);
         }
     }
 

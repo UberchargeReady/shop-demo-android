@@ -56,6 +56,7 @@ public class AccountViewModel extends BaseViewModel {
     public void makeLogoutRequest(AppApiCallback<UserResponse> callback) {
         appApiHelper.getExecutor().execute(() -> {
             userMutable.postValue(new User());
+            ordersMutable.postValue(null);
             Result<UserResponse> result = appApiHelper.getLogout();
             callback.onComplete(result);
         });
@@ -77,7 +78,7 @@ public class AccountViewModel extends BaseViewModel {
         getUserMutable().postValue(user);
     }
 
-    public void updateOrders() {
+    public void loadOrders() {
         if (isValidUser()) {
             OrderRequest request = new OrderRequest.Builder(getApiHeader()).ofUserLoggedIn().build();
             appApiHelper.getExecutor().execute(() -> {
@@ -87,6 +88,6 @@ public class AccountViewModel extends BaseViewModel {
                     orders = ((Result.Success<OrderResponse>) result).data.getOrders();
                 getOrdersMutable().postValue(orders);
             });
-        }
+        } else getOrdersMutable().postValue(null);
     }
 }
