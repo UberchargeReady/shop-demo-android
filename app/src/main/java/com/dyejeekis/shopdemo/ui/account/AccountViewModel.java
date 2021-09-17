@@ -55,8 +55,8 @@ public class AccountViewModel extends BaseViewModel {
 
     public void makeLogoutRequest(AppApiCallback<UserResponse> callback) {
         appApiHelper.getExecutor().execute(() -> {
+            userMutable.postValue(new User());
             Result<UserResponse> result = appApiHelper.getLogout();
-            updateUserMutable(new User());
             callback.onComplete(result);
         });
     }

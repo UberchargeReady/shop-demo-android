@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.dyejeekis.shopdemo.R;
+import com.dyejeekis.shopdemo.ShopDemoApp;
 import com.dyejeekis.shopdemo.data.model.Entity;
 import com.dyejeekis.shopdemo.data.model.Order;
 import com.dyejeekis.shopdemo.data.model.Product;
@@ -111,6 +112,7 @@ public class AccountFragment extends Fragment implements View.OnClickListener {
             case R.id.button_logout:
                 Util.hideKeyboard(getActivity());
                 accountViewModel.makeLogoutRequest(new AppApiCallback<>(getContext(), result -> {
+                    ShopDemoApp.getInstance().setCurrentUser(new User());
                     if (result instanceof Result.Success)
                         Util.displayShortToast(getContext(), "Logged out");
                 }));

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.dyejeekis.shopdemo.ShopDemoApp;
 import com.dyejeekis.shopdemo.data.model.Entity;
 import com.dyejeekis.shopdemo.data.model.Product;
 import com.dyejeekis.shopdemo.data.model.ProductList;
@@ -93,7 +94,10 @@ public class ShopFragment extends Fragment implements ProductListener {
     @Override
     public View.OnClickListener onCartClick(Product product) {
         return v -> {
-            cartViewModel.addToCart(product);
+            if (ShopDemoApp.getInstance().getCurrentUser().isLoggedIn()) {
+                Util.displayShortToast(getContext(), "Added to cart");
+                cartViewModel.addToCart(product);
+            } else Util.displayShortToast(getContext(), "Please log in");
         };
     }
 
