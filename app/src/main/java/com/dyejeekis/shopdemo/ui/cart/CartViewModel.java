@@ -17,7 +17,6 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
 
     private final AppApiHelper appApiHelper = new AppApiHelper();
 
-    private ProductList cart = new ProductList();
     private MutableLiveData<ProductList> cartMutable;
 
     public MutableLiveData<ProductList> getCartMutable() {
@@ -34,9 +33,10 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
             CartRequest request = new CartRequest.Builder(getApiHeader()).ofUserLoggedIn().build();
             appApiHelper.getExecutor().execute(() -> {
                 Result<ProductResponse> result = appApiHelper.getCart(request);
+                ProductList cart = null;
                 if (result instanceof Result.Success)
                     cart = ((Result.Success<ProductResponse>) result).data.getProducts();
-                updateCartMutable();
+                cartMutable.postValue(cart);
             });
         }
     }
@@ -44,10 +44,9 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
     @Override
     public void addToCart(Product product) {
         if (isValidUser()) {
-            String body = ""; // TODO: 9/16/2021
             CartRequest request = new CartRequest.Builder(getApiHeader())
                     .addToCart(product)
-                    .body(body)
+                    .body(product)
                     .build();
             postCartAsync(request);
         }
@@ -56,10 +55,9 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
     @Override
     public void removeFromCart(Product product) {
         if (isValidUser()) {
-            String body = ""; // TODO: 9/16/2021
             CartRequest request = new CartRequest.Builder(getApiHeader())
                     .removeFromCart(product)
-                    .body(body)
+                    .body(product)
                     .build();
             postCartAsync(request);
         }
@@ -68,10 +66,9 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
     @Override
     public void increaseQuantity(Product product) {
         if (isValidUser()) {
-            String body = ""; // TODO: 9/16/2021
             CartRequest request = new CartRequest.Builder(getApiHeader())
                     .modifyQuantity(product)
-                    .body(body)
+                    .body(product)
                     .build();
             postCartAsync(request);
         }
@@ -80,10 +77,9 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
     @Override
     public void decreaseQuantity(Product product) {
         if (isValidUser()) {
-            String body = ""; // TODO: 9/16/2021
             CartRequest request = new CartRequest.Builder(getApiHeader())
                     .modifyQuantity(product)
-                    .body(body)
+                    .body(product)
                     .build();
             postCartAsync(request);
         }
@@ -92,10 +88,9 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
     @Override
     public void emptyCart() {
         if (isValidUser()) {
-            String body = ""; // TODO: 9/16/2021
             CartRequest request = new CartRequest.Builder(getApiHeader())
                     .emptyCart()
-                    .body(body)
+                    .body("")
                     .build();
             postCartAsync(request);
         }
@@ -107,8 +102,8 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
         appApiHelper.getExecutor().execute(() -> {
             Result<OrderResponse> result = appApiHelper.getOrder(request);
             if (result instanceof Result.Success) {
-                cart = new ProductList();
-                updateCartMutable();
+                ProductList cart = new ProductList();
+                cartMutable.postValue(cart);
             }
         });
     }
@@ -117,17 +112,15 @@ public class CartViewModel extends BaseViewModel implements CartHelper {
         appApiHelper.getExecutor().execute(() -> {
             Result<ProductResponse> result = appApiHelper.postCart(request);
             if (result instanceof Result.Success) {
-                cart = ((Result.Success<ProductResponse>) result).data.getProducts();
-                updateCartMutable();
+                //ProductList cart = ((Result.Success<ProductResponse>) result).data.getProducts();
+                Result<ProductResponse> cartDetails = appApiHelper.getCart(
+                        new CartRequest.Builder(getApiHeader()).ofUserLoggedIn().build());
+                if (cartDetails instanceof Result.Success) {
+                    cartMutable.postValue(((Result.Success<ProductResponse>) cartDetails).data.getProducts());
+                } else {
+                    // TODO: 9/17/2021 error
+                }
             }
         });
-    }
-
-    public ProductList getCart() {
-        return cart;
-    }
-
-    private void updateCartMutable() {
-        cartMutable.postValue(cart);
     }
 }

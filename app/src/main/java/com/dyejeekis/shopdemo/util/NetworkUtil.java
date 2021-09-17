@@ -37,8 +37,9 @@ public class NetworkUtil {
                 .build();
         Response response = client.newCall(request).execute();
 
-        //Log.d("OkHttp", "Response body: " + response.body().string());
-        return response.body().string();
+        String responseStr = response.body().string();
+        Log.d("OkHttp", "Response body: " + responseStr);
+        return responseStr;
     }
 
     public static String post(String url, ApiHeader apiHeader, String jsonBody) throws IOException {
@@ -50,7 +51,10 @@ public class NetworkUtil {
                 .post(body)
                 .build();
         Response response = client.newCall(request).execute();
-        return response.body().string();
+
+        String responseStr = response.body().string();
+        Log.d("OkHttp", "Response body: " + responseStr);
+        return responseStr;
     }
 
     public static String put(String url, ApiHeader apiHeader, String jsonBody) throws IOException {

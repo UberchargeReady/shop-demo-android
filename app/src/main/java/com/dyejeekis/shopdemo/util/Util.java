@@ -34,6 +34,13 @@ public class Util {
         }
     }
 
+    public static JSONObject safeJsonObject(JSONObject jsonObject, String key) {
+        try {
+            return jsonObject.getJSONObject(key);
+        } catch (JSONException e) {}
+        return null;
+    }
+
     public static String safeJsonToString(JSONObject jsonObject, String key) {
         try {
             return jsonObject.getString(key);

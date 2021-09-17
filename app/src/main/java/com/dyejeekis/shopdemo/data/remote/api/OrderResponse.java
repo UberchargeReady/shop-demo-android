@@ -31,6 +31,7 @@ public class OrderResponse extends Response {
                     jsonObject.getJSONObject("user").toString());
             user = userResponse.getUser();
         } catch (JSONException e) {
+            // orders belong to user that made the request (current user)
             user = ShopDemoApp.getInstance().getCurrentUser();
         }
 

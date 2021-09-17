@@ -1,6 +1,7 @@
 package com.dyejeekis.shopdemo.ui.shop;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.dyejeekis.shopdemo.databinding.FragmentShopBinding;
 import com.dyejeekis.shopdemo.ui.ProductListener;
 import com.dyejeekis.shopdemo.ui.ProductsAdapter;
 import com.dyejeekis.shopdemo.ui.cart.CartViewModel;
+import com.dyejeekis.shopdemo.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class ShopFragment extends Fragment implements ProductListener {
     private CartViewModel cartViewModel;
     private ShopViewModel shopViewModel;
     private FragmentShopBinding binding;
+    private ProductsAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -47,12 +50,17 @@ public class ShopFragment extends Fragment implements ProductListener {
 
     private void onShopUpdated(ProductList products) {
         if (products == null) {
-            // TODO: 9/14/2021 error
+            Util.displayShortToast(getContext(), "Error loading shop");
         } else {
             List<Entity> items = new ArrayList<>(products);
-            binding.recyclerViewShop.setAdapter(new ProductsAdapter(items, this));
+            adapter = new ProductsAdapter(items, this);
+            binding.recyclerViewShop.setAdapter(adapter);
             items.add(new ProductsAdapter.ProductsTitle("", "\n\n"));
         }
+    }
+
+    private int getShopIndex(Product product) {
+        return shopViewModel.getProductsMutable().getValue().indexOf(product);
     }
 
     @Override
@@ -68,17 +76,25 @@ public class ShopFragment extends Fragment implements ProductListener {
 
     @Override
     public View.OnClickListener onMinusClick(Product product) {
-        return null;
+        return v -> {
+            product.decreaseQuantity();
+            adapter.notifyItemChanged(getShopIndex(product));
+        };
     }
 
     @Override
     public View.OnClickListener onPlusClick(Product product) {
-        return null;
+        return v -> {
+            product.increaseQuantity();
+            adapter.notifyItemChanged(getShopIndex(product));
+        };
     }
 
     @Override
     public View.OnClickListener onCartClick(Product product) {
-        return null;
+        return v -> {
+            cartViewModel.addToCart(product);
+        };
     }
 
     @Override

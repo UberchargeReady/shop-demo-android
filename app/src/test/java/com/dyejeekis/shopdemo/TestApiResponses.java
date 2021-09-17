@@ -5,9 +5,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import com.dyejeekis.shopdemo.data.model.Order;
 import com.dyejeekis.shopdemo.data.model.Product;
 import com.dyejeekis.shopdemo.data.model.ProductList;
 import com.dyejeekis.shopdemo.data.model.User;
+import com.dyejeekis.shopdemo.data.remote.api.OrderResponse;
 import com.dyejeekis.shopdemo.data.remote.api.ProductResponse;
 import com.dyejeekis.shopdemo.data.remote.api.UserResponse;
 
@@ -69,13 +71,18 @@ public class TestApiResponses {
 
     @Test
     public void testOrderResponse() {
-        final String jsonStr = "";
-        // TODO: 9/14/2021
+        final String jsonStr = "[{\"productId\":\"6141aed5d1039fdd5e19c7ef\",\"quantity\":2,\"_id\":\"61432ed32badc9fd55b6ff62\"},{\"productId\":\"6141aed5d1039fdd5e19c7da\",\"quantity\":1,\"_id\":\"61432ede2badc9fd55b6ff6b\"}]";
+        try {
+            OrderResponse response = new OrderResponse(jsonStr);
+            Order order = response.getOrder();
+            assertEquals(order.getId(), "6141aed5d1039fdd5e19c7ef");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void testOrdersResponse() {
-        final String jsonStr = "";
-        // TODO: 9/14/2021
+        // TODO: 9/16/2021
     }
 }

@@ -6,9 +6,32 @@
     tools:context=".ui.shop.ShopFragment"
     android:padding="6dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_cart"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical">
+
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_cart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:scrollbars="vertical">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <Button
+            android:id="@+id/button_checkout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Checkout" />
+    </LinearLayout>
+
 </RelativeLayout>

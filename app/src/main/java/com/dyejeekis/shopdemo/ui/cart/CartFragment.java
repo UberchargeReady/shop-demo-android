@@ -19,6 +19,7 @@ import com.dyejeekis.shopdemo.data.model.ProductList;
 import com.dyejeekis.shopdemo.databinding.FragmentCartBinding;
 import com.dyejeekis.shopdemo.ui.ProductListener;
 import com.dyejeekis.shopdemo.ui.ProductsAdapter;
+import com.dyejeekis.shopdemo.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +28,23 @@ public class CartFragment extends Fragment implements ProductListener {
 
     private CartViewModel cartViewModel;
     private FragmentCartBinding binding;
+    private ProductsAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentCartBinding.inflate(inflater, container, false);
         binding.recyclerViewCart.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.buttonCheckout.setOnClickListener(v -> {
+            List<Product> products = cartViewModel.getCartMutable().getValue();
+            if (products != null && products.size() > 0) {
+                cartViewModel.makeOrder();
+            } else Util.displayShortToast(getContext(), "Cart is empty");
+        });
 
         cartViewModel = new ViewModelProvider(requireActivity()).get(CartViewModel.class);
         cartViewModel.getCartMutable().observe(getViewLifecycleOwner(), this::onCartUpdated);
+        cartViewModel.loadCart();
 
         return binding.getRoot();
     }
@@ -43,7 +52,12 @@ public class CartFragment extends Fragment implements ProductListener {
     private void onCartUpdated(ProductList cart) {
         List<Entity> items = new ArrayList<>(cart);
         items.add(new ProductsAdapter.ProductsTotal("", cart.getTotalCost()));
-        binding.recyclerViewCart.setAdapter(new ProductsAdapter(items, this));
+        adapter = new ProductsAdapter(items, this);
+        binding.recyclerViewCart.setAdapter(adapter);
+    }
+
+    private int getCartIndex(Product product) {
+        return cartViewModel.getCartMutable().getValue().indexOf(product);
     }
 
     @Override
@@ -54,21 +68,25 @@ public class CartFragment extends Fragment implements ProductListener {
 
     @Override
     public View.OnClickListener onProductClick(Product product) {
-        return v -> {
-            // TODO: 9/16/2021
-        };
+        return null;
     }
 
     @Override
     public View.OnClickListener onMinusClick(Product product) {
         return v -> {
-            cartViewModel.decreaseQuantity(product);
+            if (product.getSelectedQuantity() > 1) {
+                product.decreaseQuantity();
+                cartViewModel.decreaseQuantity(product);
+            } else {
+                cartViewModel.removeFromCart(product);
+            }
         };
     }
 
     @Override
     public View.OnClickListener onPlusClick(Product product) {
         return v -> {
+            product.increaseQuantity();
             cartViewModel.increaseQuantity(product);
         };
     }

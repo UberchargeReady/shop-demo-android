@@ -5,6 +5,9 @@ import com.dyejeekis.shopdemo.data.model.User;
 import com.dyejeekis.shopdemo.data.remote.ApiEndpoint;
 import com.dyejeekis.shopdemo.data.remote.ApiHeader;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class CartRequest extends Request {
 
     private final String path;
@@ -57,7 +60,7 @@ public class CartRequest extends Request {
         }
 
         public Builder removeFromCart(Product product) {
-            path = ApiEndpoint.CART_REMOVE;
+            path = String.format(ApiEndpoint.CART_REMOVE, product.getId());
             return this;
         }
 
@@ -68,6 +71,19 @@ public class CartRequest extends Request {
 
         public Builder body(String body) {
             this.body = body;
+            return this;
+        }
+
+        public Builder body(Product product) {
+            try {
+                this.body = new JSONObject()
+                        .put("productId", product.getId())
+                        .put("quantity", product.getSelectedQuantity())
+                        .toString();
+            } catch (JSONException e) {
+                this.body = "";
+                e.printStackTrace();
+            }
             return this;
         }
 

@@ -16,6 +16,14 @@ public class Product extends Entity {
         this.selectedQuantity = 1;
     }
 
+    public Product(String id, int selectedQuantity) {
+        super(id);
+        this.name = "";
+        this.stock = 0;
+        this.price = 0;
+        this.selectedQuantity = selectedQuantity;
+    }
+
     public boolean inStock() {
         return selectedQuantity <= stock;
     }
@@ -48,6 +56,6 @@ public class Product extends Entity {
     }
 
     public void decreaseQuantity() {
-        selectedQuantity--;
+        if (selectedQuantity > 1) selectedQuantity--;
     }
 }

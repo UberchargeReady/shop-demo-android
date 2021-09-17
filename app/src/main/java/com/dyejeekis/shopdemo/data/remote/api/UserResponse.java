@@ -22,6 +22,7 @@ public class UserResponse extends Response {
         parseResponse(json);
     }
 
+    @Override
     protected void parseJSONObject(JSONObject jsonObj) throws JSONException {
         String id = jsonObj.getString("_id");
         String username = jsonObj.getString("username");
@@ -30,6 +31,7 @@ public class UserResponse extends Response {
         JSONArray items = cart.getJSONArray("items");
         ProductResponse productResponse = new ProductResponse(items.toString());
         User user = new User(id, username, token, productResponse.getProducts());
+        //User user = new User(id, username, token);
         users.add(user);
     }
 

@@ -24,9 +24,9 @@ public class ApiEndpoint {
 
     public static final String CART = BASE_API_ENDPOINT + "/cart";
 
-    public static final String CART_REMOVE = BASE_API_ENDPOINT + CART + "/remove";
+    public static final String CART_REMOVE = CART + "/%s/remove";
 
-    public static final String CART_EMPTY = BASE_API_ENDPOINT + CART + "/empty";
+    public static final String CART_EMPTY = CART + "/empty";
 
     public static final String CHECKOUT = BASE_API_ENDPOINT + "/checkout";
 
